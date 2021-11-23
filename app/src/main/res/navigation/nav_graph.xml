@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.gameonanil.tailorapp.ui.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_addCustomerFragment"
+            app:destination="@id/addCustomerFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_clothesListFragment"
+            app:destination="@id/clothesListFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_addClothesFragment"
+            app:destination="@id/addClothesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addCustomerFragment"
+        android:name="com.gameonanil.tailorapp.ui.AddCustomerFragment"
+        android:label="fragment_add_customer"
+        tools:layout="@layout/fragment_add_customer" />
+    <fragment
+        android:id="@+id/clothesListFragment"
+        android:name="com.gameonanil.tailorapp.ui.ClothesListFragment"
+        android:label="fragment_clothes_list"
+        tools:layout="@layout/fragment_clothes_list" />
+    <fragment
+        android:id="@+id/addClothesFragment"
+        android:name="com.gameonanil.tailorapp.ui.AddClothesFragment"
+        android:label="fragment_add_clothes"
+        tools:layout="@layout/fragment_add_clothes" />
+</navigation>
