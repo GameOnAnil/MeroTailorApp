@@ -8,6 +8,7 @@ data class Clothing(
     @PrimaryKey(autoGenerate = true)
     val clothingId: Int,
     val customerId: Int,
+    val clothingName: String,
     val price: Int,
     val remaining: Int
 )

@@ -1,4 +1,4 @@
-package com.gameonanil.tailorapp
+package com.gameonanil.tailorapp.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -20,7 +20,7 @@ class TailorRepository(context: Context) {
         tailorDao.insertClothing(clothing)
     }
 
-    fun getCustomerWithClothing(customerId: Int): LiveData<List<CustomerWithClothing>> {
+    fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing> {
         return tailorDao.getCustomerWithClothing(customerId)
     }
 }

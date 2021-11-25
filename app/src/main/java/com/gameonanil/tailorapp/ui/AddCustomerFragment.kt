@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.gameonanil.tailorapp.TailorViewModel
 import com.gameonanil.tailorapp.databinding.FragmentAddCustomerBinding
+import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 
 
 class AddCustomerFragment : Fragment() {

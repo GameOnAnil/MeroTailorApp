@@ -17,5 +17,5 @@ interface TailorDao {
     fun insertClothing(clothing: Clothing)
 
     @Query("SELECT * FROM customer_table WHERE customerId=:customerId ")
-    fun getCustomerWithClothing(customerId: Int): LiveData<List<CustomerWithClothing>>
+    fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing>
 }
