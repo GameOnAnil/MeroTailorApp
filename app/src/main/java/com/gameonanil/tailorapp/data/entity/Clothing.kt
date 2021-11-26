@@ -6,9 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "clothing_table")
 data class Clothing(
     @PrimaryKey(autoGenerate = true)
-    val clothingId: Int,
+    val clothingId: Int?,
     val customerId: Int,
     val clothingName: String,
-    val price: Int,
-    val remaining: Int
+    val price: Float,
+    val remaining: Float,
+    val dueDate: String
 )

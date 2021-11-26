@@ -7,6 +7,7 @@ import com.gameonanil.tailorapp.data.TailorDatabase
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.data.entity.CustomerWithClothing
+import com.gameonanil.tailorapp.data.entity.Measurement
 
 
 class TailorRepository(context: Context) {
@@ -20,7 +21,19 @@ class TailorRepository(context: Context) {
         tailorDao.insertClothing(clothing)
     }
 
+    fun insertMeasurement(measurement: Measurement) {
+        tailorDao.insertMeasurement(measurement)
+    }
+
     fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing> {
         return tailorDao.getCustomerWithClothing(customerId)
+    }
+
+    fun getMeasurementByCustomerId(customerId: Int): LiveData<Measurement> {
+        return tailorDao.getMeasurementByCustomerId(customerId)
+    }
+
+    fun getAllCustomers(): LiveData<List<Customer>> {
+        return tailorDao.getAllCustomer()
     }
 }

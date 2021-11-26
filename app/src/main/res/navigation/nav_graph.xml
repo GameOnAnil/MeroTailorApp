@@ -29,10 +29,22 @@
         android:id="@+id/clothesListFragment"
         android:name="com.gameonanil.tailorapp.ui.ClothesListFragment"
         android:label="fragment_clothes_list"
-        tools:layout="@layout/fragment_clothes_list" />
+        tools:layout="@layout/fragment_clothes_list">
+        <action
+            android:id="@+id/action_clothesListFragment_to_addClothesFragment"
+            app:destination="@id/addClothesFragment" />
+        <argument
+            android:name="customerId"
+            app:argType="integer" />
+
+    </fragment>
     <fragment
         android:id="@+id/addClothesFragment"
         android:name="com.gameonanil.tailorapp.ui.AddClothesFragment"
         android:label="fragment_add_clothes"
-        tools:layout="@layout/fragment_add_clothes" />
+        tools:layout="@layout/fragment_add_clothes">
+        <argument
+            android:name="customerId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

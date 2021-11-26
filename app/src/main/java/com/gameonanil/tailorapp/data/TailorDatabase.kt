@@ -5,8 +5,13 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
+import com.gameonanil.tailorapp.data.entity.Measurement
 
-@Database(entities = [Customer::class, Clothing::class], version = 2, exportSchema = false)
+@Database(
+    entities = [Customer::class, Clothing::class, Measurement::class],
+    version = 2,
+    exportSchema = false
+)
 abstract class TailorDatabase : RoomDatabase() {
     abstract val tailorDao: TailorDao
 

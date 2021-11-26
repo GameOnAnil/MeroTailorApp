@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="16sp"
-            tools:text="Shirt" />
+            android:text="Shirt" />
 
         <TextView
             android:id="@+id/tvUserName"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="16sp"
-            tools:text="Due Date:" />
+            android:text="Due Date:" />
 
         <TextView
             android:id="@+id/tvDueDate"
@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="16sp"
-            tools:text="Price:" />
+            android:text="Price:" />
 
         <TextView
             android:id="@+id/tvPrice"
@@ -91,7 +91,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/black"
             android:textSize="16sp"
-            tools:text="Paid At:" />
+            android:text="Paid At:" />
 
         <TextView
             android:id="@+id/tvPaidDate"

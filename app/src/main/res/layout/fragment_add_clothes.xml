@@ -9,15 +9,17 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200">
+        android:background="@color/purple_200"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Add Customer"
+            android:text="Add Clothing"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -25,7 +27,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@id/toolbar"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="10dp">
@@ -276,10 +278,11 @@
         </LinearLayout>
 
         <Button
+            android:id="@+id/btn_add_clothes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="16dp"
-            android:text="Add Customer" />
+            android:text="Add Clothing" />
     </LinearLayout>
 
 
