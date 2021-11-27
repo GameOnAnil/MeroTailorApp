@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.CustomerWithClothing
 import com.gameonanil.tailorapp.databinding.ClothesListRecyclerItemBinding
 
 class ClothesListAdapter(
     private val context: Context,
-    private var customerWithClothing: CustomerWithClothing?
+    private var customerWithClothing: CustomerWithClothing?,
+    private val listener: ClothesListListener
 ) : RecyclerView.Adapter<ClothesListAdapter.TailorViewHolder>() {
     companion object {
         private const val TAG = "TailorRecyclerAdapter"
@@ -39,8 +41,16 @@ class ClothesListAdapter(
 
     }
 
+
     inner class TailorViewHolder(private val binding: ClothesListRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        init {
+            itemView.setOnClickListener {
+                listener.handleItemClicked(customerWithClothing!!.clothing[adapterPosition])
+            }
+
+        }
+
         fun bindTo(customerWithClothing: CustomerWithClothing, position: Int) {
             binding.apply {
                 tvUserName.text = customerWithClothing.customer.customerName
@@ -53,6 +63,6 @@ class ClothesListAdapter(
     }
 
     interface ClothesListListener {
-        fun handleItemClicked()
+        fun handleItemClicked(clothing: Clothing)
     }
 }

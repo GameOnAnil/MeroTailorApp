@@ -13,11 +13,12 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.adapter.ClothesListAdapter
+import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.databinding.FragmentClothesListBinding
 import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 
 
-class ClothesListFragment : Fragment() {
+class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
     companion object {
         private const val TAG = "ClothesListFragment"
     }
@@ -52,13 +53,13 @@ class ClothesListFragment : Fragment() {
         customerId = ClothesListFragmentArgs.fromBundle(requireArguments()).customerId
 
 
-        mAdapter = ClothesListAdapter(requireContext(), null)
+        mAdapter = ClothesListAdapter(requireContext(), null, this)
         binding.clothingListRecycler.adapter = mAdapter
 
         tailorViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
 
         customerId?.let {
-            tailorViewModel.getCustomerWithClothing(it)
+            tailorViewModel.setCustomerId(it)
         }
 
 
@@ -86,6 +87,15 @@ class ClothesListFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun handleItemClicked(clothing: Clothing) {
+        val action =
+            ClothesListFragmentDirections.actionClothesListFragmentToClothingDetailsFragment(
+                customerId!!,
+                clothing.clothingId!!
+            )
+        findNavController().navigate(action)
     }
 
 

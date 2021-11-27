@@ -11,20 +11,28 @@ import kotlinx.coroutines.launch
 
 class TailorViewModel(application: Application) : AndroidViewModel(application) {
     private var repository: TailorRepository = TailorRepository(application)
-    private var customerIdForCustomer: MutableLiveData<Int> = MutableLiveData()
-    private var customerIdForMeasurement: MutableLiveData<Int> = MutableLiveData()
+
+    private var mCustomerId: MutableLiveData<Int> = MutableLiveData()
+    private var mClothingId: MutableLiveData<Int> = MutableLiveData()
 
     var customerWithClothing: LiveData<CustomerWithClothing> =
-        Transformations.switchMap(customerIdForCustomer) {
+        Transformations.switchMap(mCustomerId) {
             repository.getCustomerWithClothing(it)
         }
 
-    val measurement: LiveData<Measurement> = Transformations.switchMap(customerIdForMeasurement) {
+    val measurement: LiveData<Measurement> = Transformations.switchMap(mCustomerId) {
         repository.getMeasurementByCustomerId(customerId = it)
     }
 
     val customerList: LiveData<List<Customer>> = repository.getAllCustomers()
 
+    val clothing: LiveData<Clothing> = Transformations.switchMap(mClothingId) {
+        repository.getClothing(it)
+    }
+
+    fun setClothingId(clothingId: Int) {
+        mClothingId.value = clothingId
+    }
 
     fun insertCustomer(customer: Customer) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -44,23 +52,29 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun getCustomerWithClothing(customerId: Int) {
-        customerIdForCustomer.value = customerId
+    fun setCustomerId(customerId: Int) {
+        mCustomerId.value = customerId
     }
 
     fun getMeasurement(customerId: Int) {
-        customerIdForMeasurement.value = customerId
+        mCustomerId.value = customerId
     }
 
     fun getMeasurementById(customerId: Int): Measurement? {
         return repository.getMeasurementByCusId(customerId)
     }
 
+    fun getClothingByCusId(customerId: Int): Clothing? {
+        return repository.getClothingByCusId(customerId)
+    }
+
 
     fun updateMeasurement(measurement: Measurement) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.updateMeasurement(measurement)
-        }
+        repository.updateMeasurement(measurement)
+    }
+
+    fun updateClothing(clothing: Clothing) {
+        repository.updateClothing(clothing)
     }
 
 

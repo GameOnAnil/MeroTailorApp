@@ -94,11 +94,57 @@ class AddClothesFragment : Fragment() {
                     ).show()
                     return@setOnClickListener
                 }
+
+                if (etChati.text!!.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please Enter Chati", Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                }
+                if (etBaulaLambai.text!!.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please Enter Baula Lambai",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+                if (etKum.text!!.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please Enter Kum", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+                if (etKamarLambai.text!!.isEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Please Enter Kamar Lambai",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnClickListener
+                }
+                if (etPuraLambai.text!!.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please Enter Pura Lambai", Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                }
+                if (etKafGhera.text!!.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please Enter Kaf Ghera", Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                }
+                if (etKamarGhera.text!!.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please Enter Kamar Ghera", Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                }
+                if (etKakhi.text!!.isEmpty()) {
+                    Toast.makeText(requireContext(), "Please Enter Kakhi", Toast.LENGTH_SHORT)
+                        .show()
+                    return@setOnClickListener
+                }
+
                 val typeOfOrder = etTypeOfOrder.text.toString()
                 val totalPrice = etTotalPrice.text.toString().toFloat()
                 val advance = etAdvance.text.toString().toFloat()
                 val dueDate = etDueDate.text!!.trim().toString()
-
 
                 saveClothingToDb(mCustomerId!!, typeOfOrder, totalPrice, advance, dueDate)
                 val chati = etChati.text!!.trim().toString().toInt()
@@ -161,7 +207,7 @@ class AddClothesFragment : Fragment() {
 
             Toast.makeText(requireContext(), "Clothes Added Successfully", Toast.LENGTH_SHORT)
                 .show()
-            findNavController().navigateUp()
+
         } catch (e: SQLiteException) {
             Log.d(TAG, "saveClothingToDb: ERROR:${e.message}")
         }
