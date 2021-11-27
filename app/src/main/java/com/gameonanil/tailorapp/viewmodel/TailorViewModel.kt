@@ -52,5 +52,16 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         customerIdForMeasurement.value = customerId
     }
 
+    fun getMeasurementById(customerId: Int): Measurement? {
+        return repository.getMeasurementByCusId(customerId)
+    }
+
+
+    fun updateMeasurement(measurement: Measurement) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateMeasurement(measurement)
+        }
+    }
+
 
 }

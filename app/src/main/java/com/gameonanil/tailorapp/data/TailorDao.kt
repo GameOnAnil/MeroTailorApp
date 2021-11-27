@@ -18,6 +18,9 @@ interface TailorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMeasurement(measurement: Measurement)
 
+    @Update
+    fun updateMeasurement(measurement: Measurement)
+
     @Transaction
     @Query("SELECT * FROM customer_table WHERE customerId=:customerId ")
     fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing>
@@ -28,4 +31,7 @@ interface TailorDao {
 
     @Query("SELECT * FROM CUSTOMER_TABLE")
     fun getAllCustomer(): LiveData<List<Customer>>
+
+    @Query("SELECT * FROM MEASUREMENT_TABLE WHERE customerId=:customerId")
+    fun getMeasurementByCusId(customerId: Int): Measurement?
 }

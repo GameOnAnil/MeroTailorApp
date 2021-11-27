@@ -16,9 +16,6 @@
         <action
             android:id="@+id/action_mainFragment_to_clothesListFragment"
             app:destination="@id/clothesListFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_addClothesFragment"
-            app:destination="@id/addClothesFragment" />
     </fragment>
     <fragment
         android:id="@+id/addCustomerFragment"

@@ -10,14 +10,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.data.entity.Clothing
+import com.gameonanil.tailorapp.data.entity.Measurement
 import com.gameonanil.tailorapp.databinding.FragmentAddClothesBinding
 import com.gameonanil.tailorapp.viewmodel.TailorViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 class AddClothesFragment : Fragment() {
@@ -29,6 +34,7 @@ class AddClothesFragment : Fragment() {
     private val binding: FragmentAddClothesBinding get() = _binding!!
     private lateinit var mViewModel: TailorViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private var mCustomerId: Int? = null
 
 
     override fun onCreateView(
@@ -42,7 +48,7 @@ class AddClothesFragment : Fragment() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.mainFragment,
+                R.id.clothesListFragment,
             )
         )
         NavigationUI.setupWithNavController(
@@ -51,10 +57,8 @@ class AddClothesFragment : Fragment() {
             appBarConfiguration
         )
 
-
         mViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
-
-        initMeasurement()
+        mCustomerId = AddClothesFragmentArgs.fromBundle(requireArguments()).customerId
 
         binding.apply {
             btnAddClothes.setOnClickListener {
@@ -93,13 +97,47 @@ class AddClothesFragment : Fragment() {
                 val typeOfOrder = etTypeOfOrder.text.toString()
                 val totalPrice = etTotalPrice.text.toString().toFloat()
                 val advance = etAdvance.text.toString().toFloat()
-                val dueDate = "2021/01/01"
-                saveClothingToDb(1, typeOfOrder, totalPrice, advance, dueDate)
+                val dueDate = etDueDate.text!!.trim().toString()
+
+
+                saveClothingToDb(mCustomerId!!, typeOfOrder, totalPrice, advance, dueDate)
+                val chati = etChati.text!!.trim().toString().toInt()
+                val baulaLambai = etBaulaLambai.text!!.trim().toString().toInt()
+                val kafGhera = etKafGhera.text!!.trim().toString().toInt()
+                val kakhi = etKakhi.text!!.trim().toString().toInt()
+                val kamarGhera = etKamarGhera.text!!.trim().toString().toInt()
+                val kamarLambai = etKamarLambai.text!!.trim().toString().toInt()
+                val kum = etKum.text!!.trim().toString().toInt()
+                val puraLambai = etPuraLambai.text!!.trim().toString().toInt()
+                mCustomerId?.let { cusId ->
+                    val mObj = Measurement(
+                        null,
+                        cusId,
+                        chati,
+                        kum,
+                        baulaLambai,
+                        kamarLambai,
+                        puraLambai,
+                        kafGhera,
+                        kakhi,
+                        kamarGhera
+                    )
+                    insertOrUpdateMeasurement(mObj)
+                    lifecycleScope.launchWhenResumed {
+                        findNavController().navigateUp()
+                    }
+                }
+
 
             }
         }
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initMeasurement()
     }
 
     private fun saveClothingToDb(
@@ -131,7 +169,7 @@ class AddClothesFragment : Fragment() {
     }
 
     private fun initMeasurement() {
-        mViewModel.getMeasurement(1)
+        mViewModel.getMeasurement(customerId = mCustomerId!!)
         mViewModel.measurement.observe(requireActivity(), Observer {
             it?.let {
                 binding.apply {
@@ -148,9 +186,33 @@ class AddClothesFragment : Fragment() {
         })
     }
 
+    private fun insertOrUpdateMeasurement(measurement: Measurement) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val measure = mViewModel.getMeasurementById(mCustomerId!!)
+            Log.d(TAG, "insertOrUpdateMeasurement: testvalue=$measure")
+            if (measure == null) {
+                mViewModel.insertMeasurement(measurement)
+                Log.d(TAG, "insertOrUpdateMeasurement: INSERTED!!!")
+            } else {
+                mViewModel.updateMeasurement(
+                    Measurement(
+                        measureId = measure.measureId,
+                        measurement.customerId,
+                        measurement.chati,
+                        measurement.kum,
+                        measurement.baulaLambai,
+                        measurement.kamarLambai,
+                        measurement.puraLambai,
+                        measurement.kafGhera,
+                        measurement.kakhi,
+                        measurement.kamarGhera
+                    )
+                )
+                Log.d(TAG, "insertOrUpdateMeasurement: UDated!!!")
+            }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
+        }
+
     }
+
 }

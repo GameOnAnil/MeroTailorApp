@@ -1,11 +1,9 @@
 package com.gameonanil.tailorapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -59,15 +57,8 @@ class ClothesListFragment : Fragment() {
 
         tailorViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
 
-        //   tailorViewModel.insertCustomer(Customer(null,"Anil Thapa"))
-/*        tailorViewModel.insertClothing(Clothing(null,1,"T shirt ",1000,100))
-        tailorViewModel.insertClothing(Clothing(null,1,"Shirt ",1000,100))
-        tailorViewModel.insertClothing(Clothing(null,1,"Pants ",1000,100))
-        tailorViewModel.insertMeasurement(Measurement(null,1,10,10,10,10,10,10,10,10))*/
-
         customerId?.let {
             tailorViewModel.getCustomerWithClothing(it)
-            tailorViewModel.getMeasurement(it)
         }
 
 
@@ -77,14 +68,6 @@ class ClothesListFragment : Fragment() {
             }
 
         })
-
-        tailorViewModel.measurement.observe(requireActivity(), Observer {
-            it?.let {
-                Toast.makeText(requireContext(), "Measurement:$it", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "onCreateView: Measurement:$it")
-            }
-        })
-
 
         binding.apply {
             fabAddClothing.setOnClickListener {

@@ -41,15 +41,6 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
         })
         binding.apply {
 
-            btnAddCustomer.setOnClickListener {
-                val action = MainFragmentDirections.actionMainFragmentToAddCustomerFragment()
-                findNavController().navigate(action)
-            }
-            btnClothesList.setOnClickListener {
-                val action = MainFragmentDirections.actionMainFragmentToClothesListFragment(1)
-                findNavController().navigate(action)
-            }
-
             fabMain.setOnClickListener {
                 val action = MainFragmentDirections.actionMainFragmentToAddCustomerFragment()
                 findNavController().navigate(action)

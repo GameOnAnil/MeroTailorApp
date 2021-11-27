@@ -36,4 +36,12 @@ class TailorRepository(context: Context) {
     fun getAllCustomers(): LiveData<List<Customer>> {
         return tailorDao.getAllCustomer()
     }
+
+    fun getMeasurementByCusId(customerId: Int): Measurement? {
+        return tailorDao.getMeasurementByCusId(customerId)
+    }
+
+    fun updateMeasurement(measurement: Measurement) {
+        return tailorDao.updateMeasurement(measurement)
+    }
 }
