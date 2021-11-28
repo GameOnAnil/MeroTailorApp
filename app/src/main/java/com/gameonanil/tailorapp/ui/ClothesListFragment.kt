@@ -1,11 +1,11 @@
 package com.gameonanil.tailorapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -14,8 +14,13 @@ import androidx.navigation.ui.NavigationUI
 import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.adapter.ClothesListAdapter
 import com.gameonanil.tailorapp.data.entity.Clothing
+import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.databinding.FragmentClothesListBinding
-import com.gameonanil.tailorapp.viewmodel.TailorViewModel
+import com.gameonanil.tailorapp.viewmodel.ClothingListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty1
 
 
 class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
@@ -26,7 +31,7 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
     private var _binding: FragmentClothesListBinding? = null
     private val binding: FragmentClothesListBinding get() = _binding!!
     private lateinit var mAdapter: ClothesListAdapter
-    private lateinit var tailorViewModel: TailorViewModel
+    private lateinit var clothingListViewModel: ClothingListViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var customerId: Int? = null
 
@@ -53,22 +58,21 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         customerId = ClothesListFragmentArgs.fromBundle(requireArguments()).customerId
 
 
-        mAdapter = ClothesListAdapter(requireContext(), null, this)
+        mAdapter = ClothesListAdapter(requireContext(), null, null, this)
         binding.clothingListRecycler.adapter = mAdapter
 
-        tailorViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
+        clothingListViewModel = ViewModelProvider(this).get(ClothingListViewModel::class.java)
 
-        customerId?.let {
-            tailorViewModel.setCustomerId(it)
-        }
+//        customerId?.let {
+//            clothingListViewModel.setCustomerId(it)
+//        }
+//
+//        clothingListViewModel.customerWithClothing.observe(requireActivity(), Observer {
+//            mAdapter.setClothingList(Customer(1, "Anil", 123), it)
+//        })
 
+        retrieveDate(Clothing::price)
 
-        tailorViewModel.customerWithClothing.observe(requireActivity(), Observer {
-            it?.let {
-                mAdapter.setClothingList(it)
-            }
-
-        })
 
         binding.apply {
             fabAddClothing.setOnClickListener {
@@ -82,6 +86,27 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
 
 
         return binding.root
+    }
+
+    private fun retrieveDate(clothingProp: KProperty1<Clothing, *>) {
+        val comparator: Comparator<Clothing> = when (clothingProp) {
+            Clothing::dueDate -> compareBy { it.dueDate }
+            Clothing::price -> compareBy { it.price }
+            else -> compareBy { it.dueDate }
+        }
+
+        var customer: Customer? = null
+        var clothingList: List<Clothing>? = null
+        CoroutineScope(Dispatchers.IO).launch {
+            customer = clothingListViewModel.getCurrentCustomer(customerId!!)
+            clothingList = clothingListViewModel.getClothingList(customerId!!)
+            Log.d(TAG, "getData: customer=$customer and clothinglist=$clothingList")
+        }.invokeOnCompletion {
+            CoroutineScope(Dispatchers.Main).launch {
+
+                mAdapter.setClothingList(customer!!, clothingList!!.sortedWith(comparator))
+            }
+        }
     }
 
     override fun onDestroy() {

@@ -1,3 +1,4 @@
+
 package com.gameonanil.tailorapp.ui
 
 import android.os.Bundle
@@ -152,7 +153,7 @@ class ClothingDetailsFragment : Fragment() {
     }
 
     private fun updateDetails() {
-        /**UPDATE clothing*/
+
         binding.apply {
 
             val typeOfOrder = etTypeOfOrder.text.toString()
@@ -221,6 +222,7 @@ class ClothingDetailsFragment : Fragment() {
 
     }
 
+
     private fun initDetails() {
         CoroutineScope(Dispatchers.IO).launch {
             mViewModel.getClothingByCusId(mCustomerId!!).let {
@@ -234,6 +236,7 @@ class ClothingDetailsFragment : Fragment() {
                 }
             }
         }
+
 
 
 

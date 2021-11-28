@@ -25,7 +25,7 @@ interface TailorDao {
     fun updateClothing(clothing: Clothing)
 
     @Transaction
-    @Query("SELECT * FROM customer_table WHERE customerId=:customerId ")
+    @Query("SELECT * FROM customer_table WHERE customerId=:customerId")
     fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing>
 
     @Query("SELECT * FROM MEASUREMENT_TABLE WHERE customerId=:customerId")
@@ -43,6 +43,12 @@ interface TailorDao {
 
     @Query("SELECT * FROM clothing_table WHERE customerId=:customerId")
     fun getClothingByCusId(customerId: Int): Clothing?
+
+    @Query("SELECT * FROM clothing_table WHERE customerId=:customerId")
+    fun getClothingListByCusId(customerId: Int): List<Clothing>?
+
+    @Query("SELECT * FROM CUSTOMER_TABLE WHERE customerId=:customerId")
+    fun getCurrentCustomer(customerId: Int): Customer
 
 
 }

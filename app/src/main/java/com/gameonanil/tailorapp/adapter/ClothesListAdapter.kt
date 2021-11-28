@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.gameonanil.tailorapp.data.entity.Clothing
-import com.gameonanil.tailorapp.data.entity.CustomerWithClothing
+import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.databinding.ClothesListRecyclerItemBinding
 
 class ClothesListAdapter(
     private val context: Context,
-    private var customerWithClothing: CustomerWithClothing?,
+    private var mCustomer: Customer?,
+    private var mClothingList: List<Clothing>?,
     private val listener: ClothesListListener
 ) : RecyclerView.Adapter<ClothesListAdapter.TailorViewHolder>() {
     companion object {
@@ -24,19 +25,20 @@ class ClothesListAdapter(
     }
 
     override fun onBindViewHolder(holder: TailorViewHolder, position: Int) {
-        customerWithClothing?.let { holder.bindTo(it, position) }
+        holder.bindTo(mCustomer!!, mClothingList!![position])
     }
 
     override fun getItemCount(): Int {
-        return if (customerWithClothing != null) {
-            customerWithClothing!!.clothing.size
+        return if (mClothingList != null) {
+            mClothingList!!.size
         } else {
             0
         }
     }
 
-    fun setClothingList(customerWithClothing: CustomerWithClothing) {
-        this@ClothesListAdapter.customerWithClothing = customerWithClothing
+    fun setClothingList(customer: Customer, clothingList: List<Clothing>) {
+        mClothingList = clothingList
+        mCustomer = customer
         notifyDataSetChanged()
 
     }
@@ -46,17 +48,17 @@ class ClothesListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-                listener.handleItemClicked(customerWithClothing!!.clothing[adapterPosition])
+                listener.handleItemClicked(mClothingList!![adapterPosition])
             }
 
         }
 
-        fun bindTo(customerWithClothing: CustomerWithClothing, position: Int) {
+        fun bindTo(customer: Customer, currentClothing: Clothing) {
             binding.apply {
-                tvUserName.text = customerWithClothing.customer.customerName
-                tvClothingName.text = customerWithClothing.clothing[position].clothingName
-                tvPrice.text = customerWithClothing.clothing[position].price.toString()
-                tvDueDate.text = customerWithClothing.clothing[position].dueDate
+                tvUserName.text = customer.customerName
+                tvClothingName.text = currentClothing.clothingName
+                tvPrice.text = currentClothing.price.toString()
+                tvDueDate.text = currentClothing.dueDate
             }
         }
 

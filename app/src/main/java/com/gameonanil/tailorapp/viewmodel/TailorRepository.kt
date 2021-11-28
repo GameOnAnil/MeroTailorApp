@@ -54,7 +54,15 @@ class TailorRepository(context: Context) {
         return tailorDao.getClothingByCusId(customerId)
     }
 
+    fun getClothingListByCusId(customerId: Int): List<Clothing>? {
+        return tailorDao.getClothingListByCusId(customerId)
+    }
+
     fun updateClothing(clothing: Clothing) {
         tailorDao.updateClothing(clothing)
+    }
+
+    fun getCurrentCustomer(customerId: Int): Customer {
+        return tailorDao.getCurrentCustomer(customerId)
     }
 }
