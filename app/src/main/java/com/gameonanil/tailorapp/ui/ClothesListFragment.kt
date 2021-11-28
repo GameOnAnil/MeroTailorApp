@@ -2,9 +2,8 @@ package com.gameonanil.tailorapp.ui
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
@@ -54,6 +53,12 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
             navHostFragment,
             appBarConfiguration
         )
+        /** TO USE OPTIONS MENU*/
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener {
+            NavHostFragment.findNavController(this).navigateUp()
+        }
 
         customerId = ClothesListFragmentArgs.fromBundle(requireArguments()).customerId
 
@@ -106,6 +111,29 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
 
                 mAdapter.setClothingList(customer!!, clothingList!!.sortedWith(comparator))
             }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.clothes_list_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.item_sort -> {
+                true
+            }
+            R.id.item_sort_due_date -> {
+                retrieveDate(Clothing::dueDate)
+                true
+            }
+            R.id.item_sort_price -> {
+                retrieveDate(Clothing::price)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+
         }
     }
 

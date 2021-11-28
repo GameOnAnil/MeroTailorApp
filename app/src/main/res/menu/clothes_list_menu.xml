@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_sort"
+        android:icon="@drawable/ic_sort"
+        android:title="Sort By"
+        app:showAsAction="ifRoom">
+        <menu>
+
+            <item
+                android:id="@+id/item_sort_due_date"
+                android:title="Sort By Due Date"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/item_sort_price"
+                android:title="Sort By Total Price"
+                app:showAsAction="never" />
+        </menu>
+
+    </item>
+
+
+</menu>
