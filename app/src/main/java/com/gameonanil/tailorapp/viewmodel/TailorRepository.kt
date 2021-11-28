@@ -50,8 +50,8 @@ class TailorRepository(context: Context) {
     }
 
 
-    fun getClothingByCusId(customerId: Int): Clothing? {
-        return tailorDao.getClothingByCusId(customerId)
+    fun getClothingById(clothingId: Int): Clothing? {
+        return tailorDao.getClothingById(clothingId)
     }
 
     fun getClothingListByCusId(customerId: Int): List<Clothing>? {

@@ -71,8 +71,8 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-    fun getClothingByCusId(customerId: Int): Clothing? {
-        return repository.getClothingByCusId(customerId)
+    fun getClothingById(clothingId: Int): Clothing? {
+        return repository.getClothingById(clothingId)
     }
 
 

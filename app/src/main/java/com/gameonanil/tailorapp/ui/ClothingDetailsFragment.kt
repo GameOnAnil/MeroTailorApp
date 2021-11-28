@@ -225,13 +225,13 @@ class ClothingDetailsFragment : Fragment() {
 
     private fun initDetails() {
         CoroutineScope(Dispatchers.IO).launch {
-            mViewModel.getClothingByCusId(mCustomerId!!).let {
+            mViewModel.getClothingById(mClothingId!!).let { clothing ->
                 withContext(Dispatchers.Main) {
                     binding.apply {
-                        etTypeOfOrder.setText(it!!.clothingName)
-                        etTotalPrice.setText(it.price.toString())
-                        etRemaining.setText(it.remaining.toString())
-                        etDueDate.setText(it.dueDate)
+                        etTypeOfOrder.setText(clothing!!.clothingName)
+                        etTotalPrice.setText(clothing.price.toString())
+                        etRemaining.setText(clothing.remaining.toString())
+                        etDueDate.setText(clothing.dueDate)
                     }
                 }
             }

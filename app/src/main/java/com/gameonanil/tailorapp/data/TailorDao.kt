@@ -41,8 +41,8 @@ interface TailorDao {
     @Query("SELECT * FROM MEASUREMENT_TABLE WHERE customerId=:customerId")
     fun getMeasurementByCusId(customerId: Int): Measurement?
 
-    @Query("SELECT * FROM clothing_table WHERE customerId=:customerId")
-    fun getClothingByCusId(customerId: Int): Clothing?
+    @Query("SELECT * FROM clothing_table WHERE clothingId=:clothingId")
+    fun getClothingById(clothingId: Int): Clothing?
 
     @Query("SELECT * FROM clothing_table WHERE customerId=:customerId")
     fun getClothingListByCusId(customerId: Int): List<Clothing>?

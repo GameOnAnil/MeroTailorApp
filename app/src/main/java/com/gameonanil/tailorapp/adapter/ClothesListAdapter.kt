@@ -46,14 +46,12 @@ class ClothesListAdapter(
 
     inner class TailorViewHolder(private val binding: ClothesListRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        init {
-            itemView.setOnClickListener {
-                listener.handleItemClicked(mClothingList!![adapterPosition])
-            }
-
-        }
 
         fun bindTo(customer: Customer, currentClothing: Clothing) {
+            itemView.setOnClickListener {
+                listener.handleItemClicked(currentClothing)
+            }
+
             binding.apply {
                 tvUserName.text = customer.customerName
                 tvClothingName.text = currentClothing.clothingName
