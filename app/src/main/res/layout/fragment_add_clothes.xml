@@ -73,7 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:imeOptions="actionNext"
+                android:imeOptions="actionDone"
                 android:inputType="numberDecimal" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,8 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:imeOptions="actionNext"
-                android:inputType="date" />
+                android:focusableInTouchMode="false" />
         </com.google.android.material.textfield.TextInputLayout>
 
 

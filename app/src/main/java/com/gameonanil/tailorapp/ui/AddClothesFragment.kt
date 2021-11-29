@@ -1,11 +1,15 @@
 package com.gameonanil.tailorapp.ui
 
+
+import android.app.DatePickerDialog
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
+
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,9 +27,11 @@ import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.DateFormat
+import java.util.*
 
 
-class AddClothesFragment : Fragment() {
+class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     companion object {
         private const val TAG = "AddClothesFragment"
     }
@@ -176,6 +182,22 @@ class AddClothesFragment : Fragment() {
 
 
             }
+
+            etDueDate.setOnClickListener {
+                val calendar = Calendar.getInstance()
+                val year = calendar.get(Calendar.YEAR)
+                val month = calendar.get(Calendar.MONTH)
+                val dayOfWeek = calendar.get(Calendar.DAY_OF_MONTH)
+
+                DatePickerDialog(
+                    requireContext(),
+                    this@AddClothesFragment,
+                    year,
+                    month,
+                    dayOfWeek
+                ).show()
+
+            }
         }
 
         return binding.root
@@ -185,6 +207,7 @@ class AddClothesFragment : Fragment() {
         super.onStart()
         initMeasurement()
     }
+
 
     private fun saveClothingToDb(
         customerId: Int,
@@ -259,6 +282,15 @@ class AddClothesFragment : Fragment() {
 
         }
 
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val date = Calendar.getInstance()
+        date.set(Calendar.YEAR, year)
+        date.set(Calendar.MONTH, month)
+        date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+        val formattedDate = DateFormat.getDateInstance().format(date.time)
+        binding.etDueDate.setText(formattedDate.toString())
     }
 
 }

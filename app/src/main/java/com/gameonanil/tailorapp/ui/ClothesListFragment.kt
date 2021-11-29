@@ -68,17 +68,8 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
 
         clothingListViewModel = ViewModelProvider(this).get(ClothingListViewModel::class.java)
 
-//        customerId?.let {
-//            clothingListViewModel.setCustomerId(it)
-//        }
-//
-//        clothingListViewModel.customerWithClothing.observe(requireActivity(), Observer {
-//            mAdapter.setClothingList(Customer(1, "Anil", 123), it)
-//        })
 
         retrieveDate(Clothing::price)
-
-
         binding.apply {
             fabAddClothing.setOnClickListener {
                 val action =

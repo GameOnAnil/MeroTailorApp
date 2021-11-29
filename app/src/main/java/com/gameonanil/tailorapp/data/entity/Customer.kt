@@ -8,5 +8,5 @@ data class Customer(
     @PrimaryKey(autoGenerate = true)
     val customerId: Int?,
     val customerName: String,
-    val customerPhone: Int
+    val customerPhone: String
 )

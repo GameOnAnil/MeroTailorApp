@@ -13,13 +13,6 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
 
     private var mCustomerId: MutableLiveData<Int> = MutableLiveData()
     private var mClothingId: MutableLiveData<Int> = MutableLiveData()
-    val mSortBy: MutableLiveData<String> = MutableLiveData()
-
-//    var customerWithClothing: LiveData<List<Clothing>> =
-//        Transformations.switchMap(mSortBy) {
-//            mCustomerId.value?.let { it1 -> repository.getClothingListByCusId(it1,it) }
-//        }
-//
 
 
     val measurement: LiveData<Measurement> = Transformations.switchMap(mCustomerId) {
@@ -52,14 +45,6 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertMeasurement(measurement)
         }
-    }
-
-    fun setCustomerId(customerId: Int) {
-        mCustomerId.value = customerId
-    }
-
-    fun setSort(sort: String) {
-        mSortBy.value = sort
     }
 
     fun getMeasurement(customerId: Int) {

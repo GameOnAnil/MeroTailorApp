@@ -62,7 +62,7 @@ class AddCustomerFragment : Fragment() {
                 }
 
                 val customerName = etEnterName.text!!.trim().toString()
-                val phone = etEnterPhone.text!!.trim().toString().toInt()
+                val phone = etEnterPhone.text!!.trim().toString()
 
                 mViewModel.insertCustomer(Customer(null, customerName, phone))
                 findNavController().navigateUp()

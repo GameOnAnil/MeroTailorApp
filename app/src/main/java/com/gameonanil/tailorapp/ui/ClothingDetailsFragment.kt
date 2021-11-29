@@ -1,11 +1,12 @@
-
 package com.gameonanil.tailorapp.ui
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +16,10 @@ import com.gameonanil.tailorapp.data.entity.Measurement
 import com.gameonanil.tailorapp.databinding.FragmentClothingDetailsBinding
 import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 import kotlinx.coroutines.*
+import java.text.DateFormat
+import java.util.*
 
-class ClothingDetailsFragment : Fragment() {
+class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     companion object {
         private const val TAG = "ClothingDetailsFragment"
     }
@@ -138,11 +141,24 @@ class ClothingDetailsFragment : Fragment() {
 
                 }
             }
+
+            etDueDate.setOnClickListener {
+                pickDate()
+            }
         }
 
 
 
         return binding.root
+    }
+
+    private fun pickDate() {
+        val calender = Calendar.getInstance()
+        val year = calender.get(Calendar.YEAR)
+        val month = calender.get(Calendar.MONTH)
+        val day = calender.get(Calendar.DAY_OF_MONTH)
+        DatePickerDialog(requireContext(), this, year, month, day).show()
+
     }
 
     override fun onStart() {
@@ -193,7 +209,6 @@ class ClothingDetailsFragment : Fragment() {
         }
     }
 
-
     private fun insertOrUpdateMeasure(measurement: Measurement, clothing: Clothing) {
 
         val measure = mViewModel.getMeasurementById(mCustomerId!!)
@@ -221,7 +236,6 @@ class ClothingDetailsFragment : Fragment() {
         }
 
     }
-
 
     private fun initDetails() {
         CoroutineScope(Dispatchers.IO).launch {
@@ -262,6 +276,16 @@ class ClothingDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        val date = Calendar.getInstance()
+        date.set(Calendar.YEAR, year)
+        date.set(Calendar.MONTH, month)
+        date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+
+        val formattedDate = DateFormat.getDateInstance().format(date.time)
+        binding.etDueDate.setText(formattedDate.toString())
     }
 
 }
