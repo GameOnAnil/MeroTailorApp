@@ -10,7 +10,11 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
+import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Measurement
 import com.gameonanil.tailorapp.databinding.FragmentClothingDetailsBinding
@@ -30,11 +34,19 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private lateinit var mViewModel: TailorViewModel
     private var mClothingId: Int? = null
     private var mCustomerId: Int? = null
+    private lateinit var appBarConfiguration: AppBarConfiguration
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentClothingDetailsBinding.inflate(inflater, container, false)
+
+        //SETUP TOOLBAR NAVIGATION
+        val navHostFragment = NavHostFragment.findNavController(this)
+        appBarConfiguration = AppBarConfiguration(setOf(R.layout.fragment_clothes_list))
+        NavigationUI.setupWithNavController(binding.toolbar, navHostFragment, appBarConfiguration)
+
+
         mViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
 
         mClothingId = ClothingDetailsFragmentArgs.fromBundle(requireArguments()).clothingId
