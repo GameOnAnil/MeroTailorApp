@@ -159,8 +159,6 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             }
         }
 
-
-
         return binding.root
     }
 

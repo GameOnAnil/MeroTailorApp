@@ -40,6 +40,7 @@ class MainRecyclerAdapter(
 
         fun bindTo(customer: Customer) {
             binding.tvCustomerName.text = customer.customerName
+            binding.tvPhone.text = customer.customerPhone.toString()
         }
 
     }
