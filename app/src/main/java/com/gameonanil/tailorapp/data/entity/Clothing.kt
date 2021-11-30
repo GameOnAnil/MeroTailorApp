@@ -9,7 +9,7 @@ data class Clothing(
     val clothingId: Int?,
     val customerId: Int,
     val clothingName: String,
-    val price: Float,
-    val remaining: Float,
+    val price: Int,
+    val remaining: Int,
     val dueDate: String
 )

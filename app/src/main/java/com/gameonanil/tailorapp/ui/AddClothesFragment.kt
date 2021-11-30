@@ -148,8 +148,8 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 }
 
                 val typeOfOrder = etTypeOfOrder.text.toString()
-                val totalPrice = etTotalPrice.text.toString().toFloat()
-                val advance = etAdvance.text.toString().toFloat()
+                val totalPrice = etTotalPrice.text.toString().toInt()
+                val advance = etAdvance.text.toString().toInt()
                 val dueDate = etDueDate.text!!.trim().toString()
 
                 saveClothingToDb(mCustomerId!!, typeOfOrder, totalPrice, advance, dueDate)
@@ -212,8 +212,8 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private fun saveClothingToDb(
         customerId: Int,
         typeOfOrder: String,
-        totalPrice: Float,
-        advance: Float,
+        totalPrice: Int,
+        advance: Int,
         dueDate: String,
     ) {
         try {

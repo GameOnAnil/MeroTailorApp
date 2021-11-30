@@ -3,6 +3,7 @@ package com.gameonanil.tailorapp.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
@@ -57,6 +58,16 @@ class ClothesListAdapter(
                 tvClothingName.text = currentClothing.clothingName
                 tvPrice.text = currentClothing.price.toString()
                 tvDueDate.text = currentClothing.dueDate
+
+
+                val remaining = currentClothing.remaining
+                if (remaining.toInt() == 0) {
+                    btnPay.isVisible = false
+                    tvPaid.isVisible = true
+                } else {
+                    btnPay.isVisible = true
+                    tvPaid.isVisible = false
+                }
             }
         }
 

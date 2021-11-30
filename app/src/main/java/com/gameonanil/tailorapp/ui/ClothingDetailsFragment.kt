@@ -183,8 +183,8 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         binding.apply {
 
             val typeOfOrder = etTypeOfOrder.text.toString()
-            val totalPrice = etTotalPrice.text!!.trim().toString().toFloat()
-            val remaining = etRemaining.text!!.trim().toString().toFloat()
+            val totalPrice = etTotalPrice.text!!.trim().toString().toInt()
+            val remaining = etRemaining.text!!.trim().toString().toInt()
             val dueDate = etDueDate.text!!.trim().toString()
 
             val chati = etChati.text!!.trim().toString().toInt()
