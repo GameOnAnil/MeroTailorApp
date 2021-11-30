@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <TextView
@@ -278,9 +278,9 @@
 
         <Button
             android:id="@+id/btn_add_clothes"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="12dp"
             android:text="Add Clothing" />
     </LinearLayout>
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    android:elevation="24dp"
+    android:elevation="50dp"
     app:cardCornerRadius="8dp">
 
     <LinearLayout
@@ -47,7 +47,7 @@
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/blue"
+                    android:textColor="@color/primary"
                     android:textSize="12sp"
                     tools:text="Anil Thapa" />
             </LinearLayout>
@@ -56,7 +56,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="25"
             android:orientation="vertical"
             android:padding="4dp">
@@ -72,7 +72,7 @@
                 android:id="@+id/tvDueDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textSize="12sp"
                 tools:text="2022/01/01" />
 
@@ -80,7 +80,7 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="25"
             android:orientation="vertical"
             android:padding="4dp">
@@ -96,7 +96,7 @@
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textSize="12sp"
                 tools:text="Rs. 1500" />
 
@@ -128,11 +128,12 @@
                 android:layout_height="30dp"
                 android:layout_centerInParent="true"
                 android:background="@drawable/round_btn_background"
-                android:backgroundTint="@color/red"
+                android:backgroundTint="@color/primary2"
                 android:text="Pay"
                 android:textColor="@color/white"
                 android:textSize="12dp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                tools:visibility="visible" />
 
         </RelativeLayout>
     </LinearLayout>

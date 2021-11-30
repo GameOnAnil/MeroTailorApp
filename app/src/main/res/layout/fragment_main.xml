@@ -10,7 +10,7 @@
         android:id="@+id/toolbar_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/purple_200"
+        android:background="@color/primary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         <TextView
@@ -40,7 +40,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="15dp"
-        android:src="@drawable/ic_add" />
+        android:src="@drawable/ic_add"
+        app:backgroundTint="@color/primary" />
 
 
 </RelativeLayout>
