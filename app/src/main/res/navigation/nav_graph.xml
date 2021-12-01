@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_clothesListFragment_to_clothingDetailsFragment"
             app:destination="@id/clothingDetailsFragment" />
+        <action
+            android:id="@+id/action_clothesListFragment_to_payFragment"
+            app:destination="@id/payFragment" />
 
     </fragment>
     <fragment
@@ -52,6 +55,18 @@
         android:name="com.gameonanil.tailorapp.ui.ClothingDetailsFragment"
         android:label="fragment_clothing_details"
         tools:layout="@layout/fragment_clothing_details">
+        <argument
+            android:name="customerId"
+            app:argType="integer" />
+        <argument
+            android:name="clothingId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/payFragment"
+        android:name="com.gameonanil.tailorapp.ui.PayFragment"
+        android:label="fragment_pay"
+        tools:layout="@layout/fragment_pay">
         <argument
             android:name="customerId"
             app:argType="integer" />

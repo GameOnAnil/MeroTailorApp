@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textAlignment="center" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -133,7 +133,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:imeOptions="actionNext"
-                    android:inputType="number"
+                    android:inputType="numberDecimal"
                     android:textAlignment="center" />
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -65,7 +65,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         ).show()
                         return@setOnClickListener
                     }
-                    if (etTotalPrice.text!!.isEmpty()) {
+                    if (etTotalPrice.text!!.isEmpty() || etTotalPrice.text!!.toString() == ".") {
                         Toast.makeText(
                             requireContext().applicationContext,
                             "Please Enter Total Price",
@@ -73,7 +73,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         ).show()
                         return@setOnClickListener
                     }
-                    if (etRemaining.text!!.isEmpty()) {
+                    if (etRemaining.text!!.isEmpty() || etRemaining.text!!.toString() == ".") {
                         Toast.makeText(
                             requireContext().applicationContext,
                             "Please Enter Remaining",

@@ -142,5 +142,13 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         findNavController().navigate(action)
     }
 
+    override fun handlePaymentClicked(clothing: Clothing) {
+        val action = ClothesListFragmentDirections.actionClothesListFragmentToPayFragment(
+            customerId!!,
+            clothing.clothingId!!
+        )
+        findNavController().navigate(action)
+    }
+
 
 }

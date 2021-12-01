@@ -49,6 +49,7 @@ class ClothesListAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bindTo(customer: Customer, currentClothing: Clothing) {
+
             itemView.setOnClickListener {
                 listener.handleItemClicked(currentClothing)
             }
@@ -68,6 +69,10 @@ class ClothesListAdapter(
                     btnPay.isVisible = true
                     tvPaid.isVisible = false
                 }
+
+                btnPay.setOnClickListener {
+                    listener.handlePaymentClicked(clothing = currentClothing)
+                }
             }
         }
 
@@ -75,5 +80,6 @@ class ClothesListAdapter(
 
     interface ClothesListListener {
         fun handleItemClicked(clothing: Clothing)
+        fun handlePaymentClicked(clothing: Clothing)
     }
 }

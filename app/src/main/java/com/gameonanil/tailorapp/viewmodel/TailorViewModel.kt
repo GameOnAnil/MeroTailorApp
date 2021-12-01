@@ -25,10 +25,6 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         repository.getClothing(it)
     }
 
-    fun setClothingId(clothingId: Int) {
-        mClothingId.value = clothingId
-    }
-
     fun insertCustomer(customer: Customer) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertCustomer(customer)
