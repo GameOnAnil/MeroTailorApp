@@ -11,7 +11,8 @@ import com.gameonanil.tailorapp.data.relation.CustomerWithClothing
 class MainFragmentViewModel(application: Application) : AndroidViewModel(application) {
     var repository: TailorRepository = TailorRepository(application.baseContext)
 
-    val customerList: LiveData<List<Customer>> = repository.getAllCustomers()
+    val customerWithClothing: LiveData<List<CustomerWithClothing>> =
+        repository.getAllCustomerWithClothes()
 
     fun getCustomerWithClothing(customerId: Int): CustomerWithClothing {
         return repository.getCustomerWithClothing(customerId)

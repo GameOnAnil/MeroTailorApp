@@ -29,7 +29,7 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
     private var _binding: FragmentMainBinding? = null
     private val binding: FragmentMainBinding get() = _binding!!
     private lateinit var mAdapter: MainRecyclerAdapter
-    private lateinit var customerList: MutableList<Customer>
+    private lateinit var customerList: MutableList<CustomerWithClothing>
     private lateinit var mViewModel: MainFragmentViewModel
 
     override fun onCreateView(
@@ -43,7 +43,7 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
         binding.recyclerMain.adapter = mAdapter
         mViewModel = ViewModelProvider(this).get(MainFragmentViewModel::class.java)
 
-        mViewModel.customerList.observe(requireActivity(), Observer {
+        mViewModel.customerWithClothing.observe(requireActivity(), Observer {
             mAdapter.setCustomerList(it)
         })
         binding.apply {

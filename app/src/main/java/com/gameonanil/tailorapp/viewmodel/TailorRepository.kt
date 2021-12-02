@@ -65,6 +65,10 @@ class TailorRepository(context: Context) {
         return tailorDao.getAllCustomer()
     }
 
+    fun getAllCustomerWithClothes(): LiveData<List<CustomerWithClothing>> {
+        return tailorDao.getAllCustomerWithClothes()
+    }
+
     fun getMeasurementByCusId(customerId: Int): Measurement? {
         return tailorDao.getMeasurementByCusId(customerId)
     }

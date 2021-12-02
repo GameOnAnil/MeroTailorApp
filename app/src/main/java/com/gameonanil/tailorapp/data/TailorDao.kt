@@ -54,6 +54,9 @@ interface TailorDao {
     @Query("SELECT * FROM CUSTOMER_TABLE")
     fun getAllCustomer(): LiveData<List<Customer>>
 
+    @Query("SELECT * FROM CUSTOMER_TABLE")
+    fun getAllCustomerWithClothes(): LiveData<List<CustomerWithClothing>>
+
     @Query("SELECT * FROM MEASUREMENT_TABLE WHERE customerId=:customerId")
     fun getMeasurementByCusId(customerId: Int): Measurement?
 
