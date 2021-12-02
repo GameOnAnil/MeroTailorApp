@@ -25,6 +25,7 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         repository.getClothing(it)
     }
 
+    /**INSERT**/
     fun insertCustomer(customer: Customer) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertCustomer(customer)
@@ -43,6 +44,28 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+    /**UPDATE**/
+    fun updateMeasurement(measurement: Measurement) {
+        repository.updateMeasurement(measurement)
+    }
+
+    fun updateClothing(clothing: Clothing) {
+        repository.updateClothing(clothing)
+    }
+
+    /**DELETE**/
+    fun deleteClothing(clothing: Clothing) {
+        repository.deleteClothing(clothing)
+    }
+
+    fun deleteCustomer(customer: Customer) {
+        repository.deleteCustomer(customer)
+    }
+
+    fun deleteMeasurement(measurement: Measurement) {
+        repository.deleteMeasurement(measurement)
+    }
+
     fun getMeasurement(customerId: Int) {
         mCustomerId.value = customerId
     }
@@ -57,13 +80,7 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
     }
 
 
-    fun updateMeasurement(measurement: Measurement) {
-        repository.updateMeasurement(measurement)
-    }
 
-    fun updateClothing(clothing: Clothing) {
-        repository.updateClothing(clothing)
-    }
 
 
 }

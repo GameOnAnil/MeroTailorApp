@@ -12,12 +12,17 @@ import com.gameonanil.tailorapp.databinding.ClothesListRecyclerItemBinding
 class ClothesListAdapter(
     private val context: Context,
     private var mCustomer: Customer?,
-    private var mClothingList: List<Clothing>?,
+    private var mClothingList: MutableList<Clothing>?,
     private val listener: ClothesListListener
 ) : RecyclerView.Adapter<ClothesListAdapter.TailorViewHolder>() {
     companion object {
         private const val TAG = "TailorRecyclerAdapter"
     }
+
+    init {
+        mClothingList = mutableListOf()
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TailorViewHolder {
         val view =
@@ -38,12 +43,22 @@ class ClothesListAdapter(
     }
 
     fun setClothingList(customer: Customer, clothingList: List<Clothing>) {
-        mClothingList = clothingList
+        for (clothing in clothingList) {
+            mClothingList!!.add(clothing)
+        }
         mCustomer = customer
         notifyDataSetChanged()
 
     }
 
+    fun deleteItem(position: Int) {
+        listener.handleDeleteItem(mClothingList!![position], position)
+    }
+
+    fun notifyOurItemDeleted(position: Int) {
+        mClothingList!!.removeAt(position)
+        notifyDataSetChanged()
+    }
 
     inner class TailorViewHolder(private val binding: ClothesListRecyclerItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -80,6 +95,7 @@ class ClothesListAdapter(
 
     interface ClothesListListener {
         fun handleItemClicked(clothing: Clothing)
+        fun handleDeleteItem(clothing: Clothing, position: Int)
         fun handlePaymentClicked(clothing: Clothing)
     }
 }

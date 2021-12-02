@@ -16,4 +16,11 @@ class ClothingListViewModel(application: Application) : AndroidViewModel(applica
         return repository.getCurrentCustomer(customerId)
     }
 
+
+    /**DELETE**/
+    fun deleteClothing(clothing: Clothing) {
+        repository.deleteClothing(clothing)
+    }
+
+
 }

@@ -9,6 +9,7 @@ import com.gameonanil.tailorapp.data.entity.Measurement
 
 @Dao
 interface TailorDao {
+    /**INSERT**/
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCustomer(customer: Customer)
 
@@ -18,11 +19,22 @@ interface TailorDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMeasurement(measurement: Measurement)
 
+    /**UPDATE**/
     @Update
     fun updateMeasurement(measurement: Measurement)
 
     @Update
     fun updateClothing(clothing: Clothing)
+
+    /**DELETE**/
+    @Delete
+    fun deleteClothing(clothing: Clothing)
+
+    @Delete
+    fun deleteCustomer(customer: Customer)
+
+    @Delete
+    fun deleteMeasurement(measurement: Measurement)
 
     @Transaction
     @Query("SELECT * FROM customer_table WHERE customerId=:customerId")

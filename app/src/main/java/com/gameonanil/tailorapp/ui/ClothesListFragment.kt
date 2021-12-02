@@ -1,8 +1,9 @@
 package com.gameonanil.tailorapp.ui
 
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -10,15 +11,19 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.adapter.ClothesListAdapter
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.databinding.FragmentClothesListBinding
+import com.gameonanil.tailorapp.utils.SwipeGesture
 import com.gameonanil.tailorapp.viewmodel.ClothingListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.reflect.KProperty1
 
 
@@ -80,8 +85,35 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
             }
         }
 
+        val item = object : SwipeGesture(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val alertDialog = AlertDialog.Builder(requireContext()).setTitle("Are you sure?")
+                    .setNegativeButton("No", DialogInterface.OnClickListener { dialog, id ->
+                        dialog.dismiss()
+                        mAdapter.notifyDataSetChanged()
+                    }).setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                        mAdapter.deleteItem(viewHolder.adapterPosition)
+                    })
+                alertDialog.show()
+
+            }
+        }
+        val itemTouchHelper = ItemTouchHelper(item)
+        itemTouchHelper.attachToRecyclerView(binding.clothingListRecycler)
+
+
+
 
         return binding.root
+    }
+
+    override fun handleDeleteItem(clothing: Clothing, position: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            clothingListViewModel.deleteClothing(clothing)
+            withContext(Dispatchers.Main) {
+                mAdapter.notifyOurItemDeleted(position)
+            }
+        }
     }
 
     private fun retrieveDate(clothingProp: KProperty1<Clothing, *>) {
@@ -96,7 +128,6 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         CoroutineScope(Dispatchers.IO).launch {
             customer = clothingListViewModel.getCurrentCustomer(customerId!!)
             clothingList = clothingListViewModel.getClothingList(customerId!!)
-            Log.d(TAG, "getData: customer=$customer and clothinglist=$clothingList")
         }.invokeOnCompletion {
             CoroutineScope(Dispatchers.Main).launch {
 

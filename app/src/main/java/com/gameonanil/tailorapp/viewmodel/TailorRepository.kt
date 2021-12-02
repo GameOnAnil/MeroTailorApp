@@ -13,6 +13,7 @@ import com.gameonanil.tailorapp.data.entity.Measurement
 class TailorRepository(context: Context) {
     private var tailorDao: TailorDao = TailorDatabase.getInstance(context).tailorDao
 
+    /**INSERT**/
     fun insertCustomer(customer: Customer) {
         tailorDao.insertCustomer(customer)
     }
@@ -24,6 +25,29 @@ class TailorRepository(context: Context) {
     fun insertMeasurement(measurement: Measurement) {
         tailorDao.insertMeasurement(measurement)
     }
+
+    /**UPDATE**/
+    fun updateClothing(clothing: Clothing) {
+        tailorDao.updateClothing(clothing)
+    }
+
+    fun updateMeasurement(measurement: Measurement) {
+        tailorDao.updateMeasurement(measurement)
+    }
+
+    /**DELETE**/
+    fun deleteClothing(clothing: Clothing) {
+        tailorDao.deleteClothing(clothing)
+    }
+
+    fun deleteCustomer(customer: Customer) {
+        tailorDao.deleteCustomer(customer)
+    }
+
+    fun deleteMeasurement(measurement: Measurement) {
+        tailorDao.deleteMeasurement(measurement)
+    }
+
 
     fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing> {
         return tailorDao.getCustomerWithClothing(customerId)
@@ -45,10 +69,6 @@ class TailorRepository(context: Context) {
         return tailorDao.getClothing(clothingId)
     }
 
-    fun updateMeasurement(measurement: Measurement) {
-        tailorDao.updateMeasurement(measurement)
-    }
-
 
     fun getClothingById(clothingId: Int): Clothing? {
         return tailorDao.getClothingById(clothingId)
@@ -58,11 +78,10 @@ class TailorRepository(context: Context) {
         return tailorDao.getClothingListByCusId(customerId)
     }
 
-    fun updateClothing(clothing: Clothing) {
-        tailorDao.updateClothing(clothing)
-    }
 
     fun getCurrentCustomer(customerId: Int): Customer {
         return tailorDao.getCurrentCustomer(customerId)
     }
+
+
 }
