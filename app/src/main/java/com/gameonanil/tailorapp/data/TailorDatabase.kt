@@ -9,7 +9,7 @@ import com.gameonanil.tailorapp.data.entity.Measurement
 
 @Database(
     entities = [Customer::class, Clothing::class, Measurement::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class TailorDatabase : RoomDatabase() {

@@ -108,13 +108,18 @@ class PayFragment : Fragment() {
     private fun updateDatabase(paid: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             mViewModel.getClothingById(mClothingId!!).let {
+                var isPaid = it!!.isPaid
+                if (it.remaining - paid == 0) {
+                    isPaid = true
+                }
                 val clothing = Clothing(
                     mClothingId!!,
                     mCustomerId!!,
-                    it!!.clothingName,
+                    it.clothingName,
                     it.price,
                     it.remaining - paid,
-                    it.dueDate
+                    it.dueDate,
+                    isPaid
                 )
                 Log.d(TAG, "updateDatabase: clothing=${clothing}")
                 mViewModel.updateClothing(clothing)

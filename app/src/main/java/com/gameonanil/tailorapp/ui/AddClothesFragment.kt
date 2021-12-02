@@ -151,8 +151,12 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val totalPrice = etTotalPrice.text.toString().toInt()
                 val advance = etAdvance.text.toString().toInt()
                 val dueDate = etDueDate.text!!.trim().toString()
+                var isPaid: Boolean = false
+                if (totalPrice - advance == 0) {
+                    isPaid = true
+                }
 
-                saveClothingToDb(mCustomerId!!, typeOfOrder, totalPrice, advance, dueDate)
+                saveClothingToDb(mCustomerId!!, typeOfOrder, totalPrice, advance, dueDate, isPaid)
                 val chati = etChati.text!!.trim().toString().toInt()
                 val baulaLambai = etBaulaLambai.text!!.trim().toString().toInt()
                 val kafGhera = etKafGhera.text!!.trim().toString().toInt()
@@ -215,6 +219,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         totalPrice: Int,
         advance: Int,
         dueDate: String,
+        isPaid: Boolean
     ) {
         try {
             mViewModel.insertClothing(
@@ -224,7 +229,8 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     typeOfOrder,
                     totalPrice,
                     totalPrice - advance,
-                    dueDate
+                    dueDate,
+                    isPaid
                 )
             )
 

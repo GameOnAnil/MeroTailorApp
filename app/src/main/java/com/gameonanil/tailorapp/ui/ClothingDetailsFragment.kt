@@ -196,8 +196,21 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             val kum = etKum.text!!.trim().toString().toInt()
             val puraLambai = etPuraLambai.text!!.trim().toString().toInt()
 
+
+            var isPaid = false
+            if (remaining == 0) {
+                isPaid = true
+            }
             val clothing =
-                Clothing(mClothingId, mCustomerId!!, typeOfOrder, totalPrice, remaining, dueDate)
+                Clothing(
+                    mClothingId,
+                    mCustomerId!!,
+                    typeOfOrder,
+                    totalPrice,
+                    remaining,
+                    dueDate,
+                    isPaid
+                )
 
             val measureObject = Measurement(
                 null, mCustomerId!!, chati,
