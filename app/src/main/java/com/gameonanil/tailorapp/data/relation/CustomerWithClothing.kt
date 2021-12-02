@@ -1,7 +1,9 @@
-package com.gameonanil.tailorapp.data.entity
+package com.gameonanil.tailorapp.data.relation
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.gameonanil.tailorapp.data.entity.Clothing
+import com.gameonanil.tailorapp.data.entity.Customer
 
 data class CustomerWithClothing(
     @Embedded

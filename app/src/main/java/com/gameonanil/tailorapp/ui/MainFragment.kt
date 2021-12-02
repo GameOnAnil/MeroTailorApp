@@ -1,6 +1,7 @@
 package com.gameonanil.tailorapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +11,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.gameonanil.tailorapp.adapter.MainRecyclerAdapter
 import com.gameonanil.tailorapp.data.entity.Customer
+import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.relation.CustomerWithClothing
 import com.gameonanil.tailorapp.databinding.FragmentMainBinding
-import com.gameonanil.tailorapp.viewmodel.TailorViewModel
+import com.gameonanil.tailorapp.viewmodel.MainFragmentViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
@@ -23,7 +30,7 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
     private val binding: FragmentMainBinding get() = _binding!!
     private lateinit var mAdapter: MainRecyclerAdapter
     private lateinit var customerList: MutableList<Customer>
-    private lateinit var mViewModel: TailorViewModel
+    private lateinit var mViewModel: MainFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,7 +41,7 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
         customerList = mutableListOf()
         mAdapter = MainRecyclerAdapter(requireContext(), customerList, this)
         binding.recyclerMain.adapter = mAdapter
-        mViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(MainFragmentViewModel::class.java)
 
         mViewModel.customerList.observe(requireActivity(), Observer {
             mAdapter.setCustomerList(it)
@@ -63,4 +70,35 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
 
     }
 
+    override fun handleDeleteClicked(customer: Customer, position: Int) {
+        var customerWithClothing: CustomerWithClothing? = null
+        var measurement: Measurement? = null
+        CoroutineScope(Dispatchers.IO).launch {
+            customerWithClothing = mViewModel.getCustomerWithClothing(customer.customerId!!)
+            measurement = mViewModel.getMeasurement(customer.customerId)
+        }.invokeOnCompletion {
+            CoroutineScope(Dispatchers.IO).launch {
+                val deleteCustomer: Int? =
+                    mViewModel.deleteCustomer(customerWithClothing!!.customer)
+                val deleteClothingList: Int? =
+                    mViewModel.deleteClothingList(customerWithClothing!!.clothing)
+                Log.d(TAG, "handleDeleteClicked: DeleteCustomer=$deleteCustomer")
+                Log.d(TAG, "handleDeleteClicked: DeleteCLO=$deleteClothingList")
+                measurement?.let {
+                    val deleteMeasurement: Int? = mViewModel.deleteMeasurement(it)
+                    Log.d(TAG, "handleDeleteClicked: DeleteMEasurement=$deleteMeasurement!!")
+                }
+                withContext(Dispatchers.Main) {
+                    if (deleteCustomer!! > 0) {
+                        mAdapter.notifyDataSetChanged()
+                    }
+                }
+            }
+
+        }
+    }
+
+    override fun handleEditClicked(customer: Customer) {
+        Log.d(TAG, "handleEditClicked: ")
+    }
 }

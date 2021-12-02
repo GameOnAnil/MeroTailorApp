@@ -6,8 +6,8 @@ import com.gameonanil.tailorapp.data.TailorDao
 import com.gameonanil.tailorapp.data.TailorDatabase
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
-import com.gameonanil.tailorapp.data.entity.CustomerWithClothing
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.relation.CustomerWithClothing
 
 
 class TailorRepository(context: Context) {
@@ -40,16 +40,20 @@ class TailorRepository(context: Context) {
         tailorDao.deleteClothing(clothing)
     }
 
-    fun deleteCustomer(customer: Customer) {
-        tailorDao.deleteCustomer(customer)
+    fun deleteCustomer(customer: Customer): Int? {
+        return tailorDao.deleteCustomer(customer)
     }
 
-    fun deleteMeasurement(measurement: Measurement) {
-        tailorDao.deleteMeasurement(measurement)
+    fun deleteMeasurement(measurement: Measurement): Int? {
+        return tailorDao.deleteMeasurement(measurement)
+    }
+
+    fun deleteClothingList(clothinglist: List<Clothing>): Int? {
+        return tailorDao.deleteClothingList(clothinglist)
     }
 
 
-    fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing> {
+    fun getCustomerWithClothing(customerId: Int): CustomerWithClothing {
         return tailorDao.getCustomerWithClothing(customerId)
     }
 

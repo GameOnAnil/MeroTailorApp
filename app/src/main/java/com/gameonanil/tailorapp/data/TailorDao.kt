@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
-import com.gameonanil.tailorapp.data.entity.CustomerWithClothing
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.relation.CustomerWithClothing
 
 @Dao
 interface TailorDao {
@@ -31,14 +31,18 @@ interface TailorDao {
     fun deleteClothing(clothing: Clothing)
 
     @Delete
-    fun deleteCustomer(customer: Customer)
+    fun deleteClothingList(customerList: List<Clothing>): Int?
 
     @Delete
-    fun deleteMeasurement(measurement: Measurement)
+    fun deleteCustomer(customer: Customer): Int?
+
+    @Delete
+    fun deleteMeasurement(measurement: Measurement): Int?
+
 
     @Transaction
     @Query("SELECT * FROM customer_table WHERE customerId=:customerId")
-    fun getCustomerWithClothing(customerId: Int): LiveData<CustomerWithClothing>
+    fun getCustomerWithClothing(customerId: Int): CustomerWithClothing
 
     @Query("SELECT * FROM MEASUREMENT_TABLE WHERE customerId=:customerId")
     fun getMeasurementByCustomerId(customerId: Int): LiveData<Measurement>

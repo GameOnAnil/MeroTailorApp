@@ -10,7 +10,6 @@ import kotlinx.coroutines.launch
 
 class TailorViewModel(application: Application) : AndroidViewModel(application) {
     private var repository: TailorRepository = TailorRepository(application)
-
     private var mCustomerId: MutableLiveData<Int> = MutableLiveData()
     private var mClothingId: MutableLiveData<Int> = MutableLiveData()
 
@@ -18,9 +17,6 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
     val measurement: LiveData<Measurement> = Transformations.switchMap(mCustomerId) {
         repository.getMeasurementByCustomerId(customerId = it)
     }
-
-    val customerList: LiveData<List<Customer>> = repository.getAllCustomers()
-
     val clothing: LiveData<Clothing> = Transformations.switchMap(mClothingId) {
         repository.getClothing(it)
     }
