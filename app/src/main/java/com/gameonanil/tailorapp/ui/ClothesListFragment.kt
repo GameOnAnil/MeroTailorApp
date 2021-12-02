@@ -2,6 +2,7 @@ package com.gameonanil.tailorapp.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -174,6 +175,7 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
     }
 
     override fun handlePaymentClicked(clothing: Clothing) {
+        Log.d(TAG, "handlePaymentClicked: CLOTHING=$clothing")
         val action = ClothesListFragmentDirections.actionClothesListFragmentToPayFragment(
             customerId!!,
             clothing.clothingId!!

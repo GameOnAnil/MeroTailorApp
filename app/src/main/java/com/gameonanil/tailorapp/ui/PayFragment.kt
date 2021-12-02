@@ -135,7 +135,7 @@ class PayFragment : Fragment() {
 
     private fun initDetails() {
         CoroutineScope(Dispatchers.IO).launch {
-            mViewModel.getClothingById(mCustomerId!!).let {
+            mViewModel.getClothingById(mClothingId!!).let {
                 withContext(Dispatchers.Main) {
                     val totalPrice = "Rs. ${it!!.price}"
                     val remaining = "Rs. ${it.remaining}"
