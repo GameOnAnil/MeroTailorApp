@@ -84,6 +84,7 @@ class PayFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d(TAG, "Payment Cannot Be Negative")
+                    return@setOnClickListener
                 }
                 val remainingWithRs = tvRemaining.text.toString()
                 val remaining = remainingWithRs.substringAfter(".").trim().toInt()
@@ -94,6 +95,7 @@ class PayFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
                     Log.d(TAG, "onCreateView: Payment Excceds Limit")
+                    return@setOnClickListener
                 }
                 //AFTER CHECKING FORMAT
                 val paid = etPayment.text.toString().trim().toFloat().toInt()
