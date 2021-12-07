@@ -49,6 +49,10 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         repository.updateClothing(clothing)
     }
 
+    fun updateCustomer(customer: Customer) {
+        repository.updateCustomer(customer)
+    }
+
     /**DELETE**/
     fun deleteClothing(clothing: Clothing) {
         repository.deleteClothing(clothing)

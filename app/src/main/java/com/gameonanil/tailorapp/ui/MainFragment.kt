@@ -99,6 +99,7 @@ class MainFragment : Fragment(), MainRecyclerAdapter.MainRecyclerInterface {
     }
 
     override fun handleEditClicked(customer: Customer) {
-        Log.d(TAG, "handleEditClicked: ")
+        val action = MainFragmentDirections.actionMainFragmentToEditCustomerFragment(customer)
+        findNavController().navigate(action)
     }
 }

@@ -84,7 +84,7 @@ class MainRecyclerAdapter(
                         true
                     }
                     R.id.itemEdit -> {
-
+                        mainInterface.handleEditClicked(customer)
                         true
                     }
                     else -> false

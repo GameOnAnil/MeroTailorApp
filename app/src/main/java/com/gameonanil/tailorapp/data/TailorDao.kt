@@ -26,6 +26,9 @@ interface TailorDao {
     @Update
     fun updateClothing(clothing: Clothing)
 
+    @Update
+    fun updateCustomer(customer: Customer)
+
     /**DELETE**/
     @Delete
     fun deleteClothing(clothing: Clothing)

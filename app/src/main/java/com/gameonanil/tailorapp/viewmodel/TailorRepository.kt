@@ -35,6 +35,10 @@ class TailorRepository(context: Context) {
         tailorDao.updateMeasurement(measurement)
     }
 
+    fun updateCustomer(customer: Customer) {
+        tailorDao.updateCustomer(customer)
+    }
+
     /**DELETE**/
     fun deleteClothing(clothing: Clothing) {
         tailorDao.deleteClothing(clothing)

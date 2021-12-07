@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_mainFragment_to_clothesListFragment"
             app:destination="@id/clothesListFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_editCustomerFragment"
+            app:destination="@id/editCustomerFragment" />
     </fragment>
     <fragment
         android:id="@+id/addCustomerFragment"
@@ -73,5 +76,14 @@
         <argument
             android:name="clothingId"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/editCustomerFragment"
+        android:name="com.gameonanil.tailorapp.ui.EditCustomerFragment"
+        android:label="fragment_edit_customer"
+        tools:layout="@layout/fragment_edit_customer">
+        <argument
+            android:name="customer"
+            app:argType="com.gameonanil.tailorapp.data.entity.Customer" />
     </fragment>
 </navigation>
