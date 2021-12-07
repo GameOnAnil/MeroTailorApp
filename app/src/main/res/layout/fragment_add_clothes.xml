@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -105,7 +106,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Chati">
+                android:hint="Chati"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etChati"
@@ -124,7 +127,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Baula Lambai">
+                android:hint="Baula Lambai"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etBaulaLambai"
@@ -151,7 +156,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Kum">
+                android:hint="Kum"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etKum"
@@ -170,7 +177,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Kamar Lambai">
+                android:hint="Kamar Lambai"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etKamarLambai"
@@ -197,7 +206,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Pura Lambai">
+                android:hint="Pura Lambai"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etPuraLambai"
@@ -216,7 +227,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Kaf Ghera">
+                android:hint="Kaf Ghera"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etKafGhera"
@@ -243,7 +256,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Kakhi">
+                android:hint="Kakhi"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etKakhi"
@@ -261,7 +276,9 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
                 android:layout_weight="1"
-                android:hint="Kamar Ghera">
+                android:hint="Kamar Ghera"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etKamarGhera"

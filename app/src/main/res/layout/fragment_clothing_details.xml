@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ClothingDetailsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -102,6 +103,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -121,6 +124,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -148,6 +153,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -167,6 +174,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -194,6 +203,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -213,6 +224,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -240,6 +253,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
@@ -258,6 +273,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:suffixText="@string/inches_string"
+                app:suffixTextColor="@color/primary"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="2dp"
