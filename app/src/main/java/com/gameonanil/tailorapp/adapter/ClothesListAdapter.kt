@@ -43,6 +43,7 @@ class ClothesListAdapter(
     }
 
     fun setClothingList(customer: Customer, clothingList: List<Clothing>) {
+        mClothingList!!.clear()
         for (clothing in clothingList) {
             mClothingList!!.add(clothing)
         }

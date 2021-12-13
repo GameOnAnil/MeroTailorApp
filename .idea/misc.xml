@@ -8,10 +8,10 @@
         <entry key="..\:/TailorApp/app/src/main/res/drawable/round_btn_background.xml" value="0.3402777777777778" />
         <entry key="..\:/TailorApp/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
         <entry key="..\:/TailorApp/app/src/main/res/layout/clothes_list_recycler_item.xml" value="0.25" />
-        <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_add_clothes.xml" value="0.33" />
-        <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_add_customer.xml" value="0.32592592592592595" />
+        <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_add_clothes.xml" value="0.25" />
+        <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_add_customer.xml" value="0.25" />
         <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_clothes_list.xml" value="0.25" />
-        <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_clothing_details.xml" value="0.32592592592592595" />
+        <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_clothing_details.xml" value="0.25" />
         <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_edit_customer.xml" value="0.23157894736842105" />
         <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_main.xml" value="0.25" />
         <entry key="..\:/TailorApp/app/src/main/res/layout/fragment_pay.xml" value="0.22" />

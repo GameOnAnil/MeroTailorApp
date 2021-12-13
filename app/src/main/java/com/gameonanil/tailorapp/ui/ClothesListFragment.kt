@@ -25,7 +25,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.reflect.KProperty1
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
@@ -75,7 +76,7 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         clothingListViewModel = ViewModelProvider(this).get(ClothingListViewModel::class.java)
 
 
-        retrieveDate(Clothing::price)
+        getDataByDate()
         binding.apply {
             fabAddClothing.setOnClickListener {
                 val action =
@@ -117,12 +118,8 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         }
     }
 
-    private fun retrieveDate(clothingProp: KProperty1<Clothing, *>) {
-        val comparator: Comparator<Clothing> = when (clothingProp) {
-            Clothing::dueDate -> compareBy { it.dueDate }
-            Clothing::price -> compareBy { it.price }
-            else -> compareBy { it.dueDate }
-        }
+    private fun getDataByPrice() {
+
 
         var customer: Customer? = null
         var clothingList: List<Clothing>? = null
@@ -131,8 +128,26 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
             clothingList = clothingListViewModel.getClothingList(customerId!!)
         }.invokeOnCompletion {
             CoroutineScope(Dispatchers.Main).launch {
+                val sortedList = clothingList!!.sortedBy { it.price }
 
-                mAdapter.setClothingList(customer!!, clothingList!!.sortedWith(comparator))
+                mAdapter.setClothingList(customer!!, sortedList)
+            }
+        }
+    }
+
+    private fun getDataByDate() {
+        var customer: Customer? = null
+        var clothingList: List<Clothing>? = null
+        CoroutineScope(Dispatchers.IO).launch {
+            customer = clothingListViewModel.getCurrentCustomer(customerId!!)
+            clothingList = clothingListViewModel.getClothingList(customerId!!)
+        }.invokeOnCompletion {
+            CoroutineScope(Dispatchers.Main).launch {
+                val sortedList = clothingList!!.sortedBy {
+                    LocalDate.parse(it.dueDate, DateTimeFormatter.ofPattern("dd MMM yyyy"))
+
+                }
+                mAdapter.setClothingList(customer!!, sortedList)
             }
         }
     }
@@ -148,11 +163,11 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
                 true
             }
             R.id.item_sort_due_date -> {
-                retrieveDate(Clothing::dueDate)
+                getDataByDate()
                 true
             }
             R.id.item_sort_price -> {
-                retrieveDate(Clothing::price)
+                getDataByPrice()
                 true
             }
             else -> super.onOptionsItemSelected(item)
