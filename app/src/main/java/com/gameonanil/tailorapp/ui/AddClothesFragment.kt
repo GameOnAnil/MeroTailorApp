@@ -1,6 +1,7 @@
 package com.gameonanil.tailorapp.ui
 
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.database.sqlite.SQLiteException
 import android.os.Bundle
@@ -9,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
-
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -27,7 +27,7 @@ import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -290,12 +290,14 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
         val date = Calendar.getInstance()
         date.set(Calendar.YEAR, year)
         date.set(Calendar.MONTH, month)
         date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        val formattedDate = DateFormat.getDateInstance().format(date.time)
+//        val formattedDate = DateFormat.getDateInstance().format(date.time)
+        val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.US).format(date.time)
         binding.etDueDate.setText(formattedDate.toString())
     }
 

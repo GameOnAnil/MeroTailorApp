@@ -145,9 +145,12 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
             CoroutineScope(Dispatchers.Main).launch {
                 val sortedList = clothingList!!.sortedBy {
                     LocalDate.parse(it.dueDate, DateTimeFormatter.ofPattern("dd MMM yyyy"))
-
                 }
                 mAdapter.setClothingList(customer!!, sortedList)
+                for (clothes in clothingList!!) {
+                    Log.d(TAG, "getDataByDate: date=${clothes.dueDate}")
+                }
+
             }
         }
     }
