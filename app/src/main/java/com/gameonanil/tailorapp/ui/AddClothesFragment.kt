@@ -297,7 +297,15 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         date.set(Calendar.MONTH, month)
         date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 //        val formattedDate = DateFormat.getDateInstance().format(date.time)
-        val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.US).format(date.time)
+        val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.US
+
+
+
+
+
+
+
+        ).format(date.time)
         binding.etDueDate.setText(formattedDate.toString())
     }
 
