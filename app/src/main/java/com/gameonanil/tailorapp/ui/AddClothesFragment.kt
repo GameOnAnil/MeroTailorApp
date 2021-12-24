@@ -22,6 +22,7 @@ import androidx.navigation.ui.NavigationUI
 import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import com.gameonanil.tailorapp.databinding.FragmentAddClothesBinding
 import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -156,7 +157,15 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     isPaid = true
                 }
 
-                saveClothingToDb(mCustomerId!!, typeOfOrder, totalPrice, advance, dueDate, isPaid)
+                saveClothingToDb(
+                    mCustomerId!!,
+                    typeOfOrder,
+                    totalPrice,
+                    advance,
+                    dueDate,
+                    isPaid,
+                    notificationDate = 123123
+                )
                 val chati = etChati.text!!.trim().toString().toInt()
                 val baulaLambai = etBaulaLambai.text!!.trim().toString().toInt()
                 val kafGhera = etKafGhera.text!!.trim().toString().toInt()
@@ -219,7 +228,8 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         totalPrice: Int,
         advance: Int,
         dueDate: String,
-        isPaid: Boolean
+        isPaid: Boolean,
+        notificationDate: Long
     ) {
         try {
             mViewModel.insertClothing(
@@ -231,12 +241,32 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     totalPrice - advance,
                     dueDate,
                     isPaid,
-                    null
+                    notificationDate
                 )
             )
 
-            Toast.makeText(requireContext(), "Clothes Added Successfully", Toast.LENGTH_SHORT)
-                .show()
+            CoroutineScope(Dispatchers.IO).launch {
+                mViewModel.getLatestClothing()?.let {
+                    mViewModel.insertNotification(
+                        NotificationEntity(
+                            null,
+                            customerId,
+                            it.clothingId!!
+                        )
+                    )
+                }
+
+            }.invokeOnCompletion {
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        requireContext(),
+                        "Clothes Added Successfully",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+            }
+
 
         } catch (e: SQLiteException) {
             Log.d(TAG, "saveClothingToDb: ERROR:${e.message}")
@@ -298,15 +328,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         date.set(Calendar.MONTH, month)
         date.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 //        val formattedDate = DateFormat.getDateInstance().format(date.time)
-        val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.US
-
-
-
-
-
-
-
-        ).format(date.time)
+        val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.US).format(date.time)
         binding.etDueDate.setText(formattedDate.toString())
     }
 

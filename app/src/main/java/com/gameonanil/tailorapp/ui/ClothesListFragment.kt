@@ -183,6 +183,7 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         }
     }
 
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.clothes_list_menu, menu)

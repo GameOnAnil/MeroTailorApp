@@ -5,6 +5,7 @@ import androidx.room.*
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import com.gameonanil.tailorapp.data.relation.CustomerWithClothing
 
 @Dao
@@ -18,6 +19,9 @@ interface TailorDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMeasurement(measurement: Measurement)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertNotification(notification: NotificationEntity)
 
     /**UPDATE**/
     @Update
@@ -71,6 +75,13 @@ interface TailorDao {
 
     @Query("SELECT * FROM CUSTOMER_TABLE WHERE customerId=:customerId")
     fun getCurrentCustomer(customerId: Int): Customer
+
+
+    @Query("SELECT * FROM notificationTable WHERE clothingId=:clothingId")
+    fun getNotificationId(clothingId: Int): List<NotificationEntity>
+
+    @Query("SELECT * FROM clothing_table ORDER BY clothingId DESC LIMIT 1")
+    fun getLatestClothing(): Clothing?
 
 
 }

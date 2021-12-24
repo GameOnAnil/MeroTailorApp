@@ -6,10 +6,11 @@ import androidx.room.RoomDatabase
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.entity.NotificationEntity
 
 @Database(
-    entities = [Customer::class, Clothing::class, Measurement::class],
-    version = 3,
+    entities = [Customer::class, Clothing::class, Measurement::class, NotificationEntity::class],
+    version = 4,
     exportSchema = false
 )
 abstract class TailorDatabase : RoomDatabase() {

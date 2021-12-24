@@ -7,6 +7,7 @@ import com.gameonanil.tailorapp.data.TailorDatabase
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import com.gameonanil.tailorapp.data.relation.CustomerWithClothing
 
 
@@ -24,6 +25,10 @@ class TailorRepository(context: Context) {
 
     fun insertMeasurement(measurement: Measurement) {
         tailorDao.insertMeasurement(measurement)
+    }
+
+    fun insertNotification(notificationEntity: NotificationEntity) {
+        tailorDao.insertNotification(notificationEntity)
     }
 
     /**UPDATE**/
@@ -93,6 +98,14 @@ class TailorRepository(context: Context) {
 
     fun getCurrentCustomer(customerId: Int): Customer {
         return tailorDao.getCurrentCustomer(customerId)
+    }
+
+    fun getNotificationId(customerId: Int, clothingId: Int): List<NotificationEntity> {
+        return tailorDao.getNotificationId(clothingId = clothingId)
+    }
+
+    fun getLatestClothing(): Clothing? {
+        return tailorDao.getLatestClothing()
     }
 
 

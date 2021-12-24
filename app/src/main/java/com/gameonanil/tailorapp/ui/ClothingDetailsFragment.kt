@@ -60,6 +60,8 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         initDetails()
         createNotificationChannel()
 
+        getNotificationId(mCustomerId!!, mCustomerId!!)
+
         binding.apply {
             btnUpdate.setOnClickListener {
                 binding.apply {
@@ -325,6 +327,15 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         binding.etDueDate.setText(formattedDate.toString())
     }
 
+    private fun getNotificationId(customerId: Int, clothingId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            Log.d(TAG, "onCreateView: mCustomer=${mCustomerId!!}")
+            Log.d(TAG, "onCreateView: mClothing=${mClothingId!!}")
+            val notification = mViewModel.getNotificationId(mCustomerId!!, mClothingId!!)
+            Log.d(TAG, "getNotificationId: NotificationID=${notification}")
+        }
+
+    }
 
     private fun getCustomTime(): Long {
         val calendar = Calendar.getInstance()

@@ -5,6 +5,7 @@ import androidx.lifecycle.*
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -37,6 +38,12 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
     fun insertMeasurement(measurement: Measurement) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertMeasurement(measurement)
+        }
+    }
+
+    fun insertNotification(notificationEntity: NotificationEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertNotification(notificationEntity)
         }
     }
 
@@ -79,8 +86,14 @@ class TailorViewModel(application: Application) : AndroidViewModel(application) 
         return repository.getClothingById(clothingId)
     }
 
+    fun getNotificationId(customerId: Int, clothingId: Int): List<NotificationEntity> {
+        return repository.getNotificationId(customerId, clothingId)
+    }
 
 
+    fun getLatestClothing(): Clothing? {
+        return repository.getLatestClothing()
+    }
 
 
 }
