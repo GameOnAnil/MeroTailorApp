@@ -12,5 +12,6 @@ data class Clothing(
     val price: Int,
     val remaining: Int,
     val dueDate: String,
-    val isPaid: Boolean
+    val isPaid: Boolean,
+    val notificationId: Long?
 )

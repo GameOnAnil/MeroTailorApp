@@ -1,7 +1,10 @@
 package com.gameonanil.tailorapp.ui
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
+import android.app.*
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +22,8 @@ import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Measurement
 import com.gameonanil.tailorapp.databinding.FragmentClothingDetailsBinding
+import com.gameonanil.tailorapp.utils.*
+import com.gameonanil.tailorapp.utils.Notification
 import com.gameonanil.tailorapp.viewmodel.TailorViewModel
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
@@ -53,10 +58,10 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         mClothingId = ClothingDetailsFragmentArgs.fromBundle(requireArguments()).clothingId
         mCustomerId = ClothingDetailsFragmentArgs.fromBundle(requireArguments()).customerId
         initDetails()
+        createNotificationChannel()
 
         binding.apply {
             btnUpdate.setOnClickListener {
-
                 binding.apply {
                     if (etTypeOfOrder.text!!.isEmpty()) {
                         Toast.makeText(
@@ -155,9 +160,12 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 }
             }
 
+
             etDueDate.setOnClickListener {
                 pickDate()
             }
+
+
         }
 
         return binding.root
@@ -197,6 +205,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             val kum = etKum.text!!.trim().toString().toInt()
             val puraLambai = etPuraLambai.text!!.trim().toString().toInt()
 
+            val notificationId = getCustomTime()
 
             var isPaid = false
             if (remaining == 0) {
@@ -210,9 +219,10 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     totalPrice,
                     remaining,
                     dueDate,
-                    isPaid
+                    isPaid,
+                    notificationId
                 )
-
+            Log.d(TAG, "updateDetails: CLOTHING:$clothing")
             val measureObject = Measurement(
                 null, mCustomerId!!, chati,
                 kum,
@@ -227,6 +237,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 insertOrUpdateMeasure(measureObject, clothing)
             }.invokeOnCompletion {
                 CoroutineScope(Dispatchers.Main).launch {
+                    scheduleNotification()
                     findNavController().navigateUp()
                 }
             }
@@ -312,6 +323,54 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         //val formattedDate = DateFormat.getDateInstance().format(date.time)
         val formattedDate = SimpleDateFormat("dd MMM yyyy", Locale.US).format(date.time)
         binding.etDueDate.setText(formattedDate.toString())
+    }
+
+
+    private fun getCustomTime(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 5)
+
+        return calendar.timeInMillis
+    }
+
+
+    private fun scheduleNotification() {
+        val intent = Intent(requireContext().applicationContext, Notification::class.java)
+        val title = "Notify title"
+        val message = "Custom msg"
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
+            notificationId,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = getCustomTime()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                time,
+                pendingIntent
+            )
+        }
+        findNavController().navigateUp()
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Notification Channel"
+            val desc = "A description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance)
+            channel.description = desc
+            val notificationManager =
+                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
 }

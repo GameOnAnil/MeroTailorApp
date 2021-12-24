@@ -98,5 +98,6 @@ class ClothesListAdapter(
         fun handleItemClicked(clothing: Clothing)
         fun handleDeleteItem(clothing: Clothing, position: Int)
         fun handlePaymentClicked(clothing: Clothing)
+
     }
 }

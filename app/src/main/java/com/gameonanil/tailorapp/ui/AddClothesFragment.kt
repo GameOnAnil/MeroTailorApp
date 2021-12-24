@@ -230,7 +230,8 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     totalPrice,
                     totalPrice - advance,
                     dueDate,
-                    isPaid
+                    isPaid,
+                    null
                 )
             )
 

@@ -1,9 +1,15 @@
 package com.gameonanil.tailorapp.ui
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,12 +25,14 @@ import com.gameonanil.tailorapp.adapter.ClothesListAdapter
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.databinding.FragmentClothesListBinding
+import com.gameonanil.tailorapp.utils.Notification
+
 import com.gameonanil.tailorapp.utils.SwipeGesture
+import com.gameonanil.tailorapp.utils.notificationId
 import com.gameonanil.tailorapp.viewmodel.ClothingListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -109,13 +117,33 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun deleteNotification(notificationId: Int) {
+        val intent = Intent(requireContext().applicationContext, Notification::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
+            notificationId,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        alarmManager.cancel(pendingIntent)
+
+    }
+
     override fun handleDeleteItem(clothing: Clothing, position: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            clothingListViewModel.deleteClothing(clothing)
-            withContext(Dispatchers.Main) {
-                mAdapter.notifyOurItemDeleted(position)
-            }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            deleteNotification(notificationId)
+            mAdapter.notifyDataSetChanged()
         }
+        /*    CoroutineScope(Dispatchers.IO).launch {
+                clothingListViewModel.deleteClothing(clothing)
+                withContext(Dispatchers.Main) {
+                    mAdapter.notifyOurItemDeleted(position)
+                }
+            }*/
     }
 
     private fun getDataByPrice() {

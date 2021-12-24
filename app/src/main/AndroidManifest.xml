@@ -2,14 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.gameonanil.tailorapp">
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
-<application
+    <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TailorApp">
+
+        <receiver
+            android:name=".utils.Notification"
+            android:enabled="true" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
