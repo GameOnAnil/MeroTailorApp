@@ -10,7 +10,7 @@ import com.gameonanil.tailorapp.data.entity.NotificationEntity
 
 @Database(
     entities = [Customer::class, Clothing::class, Measurement::class, NotificationEntity::class],
-    version = 4,
+    version = 5,
     exportSchema = false
 )
 abstract class TailorDatabase : RoomDatabase() {

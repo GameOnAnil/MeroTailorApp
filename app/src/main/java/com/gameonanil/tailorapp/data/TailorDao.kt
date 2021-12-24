@@ -46,6 +46,9 @@ interface TailorDao {
     @Delete
     fun deleteMeasurement(measurement: Measurement): Int?
 
+    @Query("DELETE FROM notificationTable WHERE clothingId=:clothingId and customerId=:customerId")
+    fun deleteNotification(customerId: Int, clothingId: Int)
+
 
     @Transaction
     @Query("SELECT * FROM customer_table WHERE customerId=:customerId")
@@ -77,8 +80,8 @@ interface TailorDao {
     fun getCurrentCustomer(customerId: Int): Customer
 
 
-    @Query("SELECT * FROM notificationTable WHERE clothingId=:clothingId")
-    fun getNotificationId(clothingId: Int): List<NotificationEntity>
+    @Query("SELECT * FROM notificationTable WHERE clothingId=:clothingId and customerId=:customerId LIMIT 1")
+    fun getNotificationId(customerId: Int, clothingId: Int): NotificationEntity?
 
     @Query("SELECT * FROM clothing_table ORDER BY clothingId DESC LIMIT 1")
     fun getLatestClothing(): Clothing?

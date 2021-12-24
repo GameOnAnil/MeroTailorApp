@@ -2,8 +2,11 @@ package com.gameonanil.tailorapp.ui
 
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
+import android.app.*
+import android.content.Context
+import android.content.Intent
 import android.database.sqlite.SQLiteException
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,7 +17,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,10 +26,12 @@ import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Measurement
 import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import com.gameonanil.tailorapp.databinding.FragmentAddClothesBinding
-import com.gameonanil.tailorapp.viewmodel.TailorViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.gameonanil.tailorapp.utils.Notification
+import com.gameonanil.tailorapp.utils.channelId
+import com.gameonanil.tailorapp.utils.messageExtra
+import com.gameonanil.tailorapp.utils.titleExtra
+import com.gameonanil.tailorapp.viewmodel.AddClothingViewModel
+import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -39,7 +43,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private var _binding: FragmentAddClothesBinding? = null
     private val binding: FragmentAddClothesBinding get() = _binding!!
-    private lateinit var mViewModel: TailorViewModel
+    private lateinit var mViewModel: AddClothingViewModel
     private lateinit var appBarConfiguration: AppBarConfiguration
     private var mCustomerId: Int? = null
 
@@ -64,8 +68,10 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             appBarConfiguration
         )
 
-        mViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(AddClothingViewModel::class.java)
         mCustomerId = AddClothesFragmentArgs.fromBundle(requireArguments()).customerId
+
+        createNotificationChannel()
 
         binding.apply {
             btnAddClothes.setOnClickListener {
@@ -157,15 +163,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     isPaid = true
                 }
 
-                saveClothingToDb(
-                    mCustomerId!!,
-                    typeOfOrder,
-                    totalPrice,
-                    advance,
-                    dueDate,
-                    isPaid,
-                    notificationDate = 123123
-                )
+
                 val chati = etChati.text!!.trim().toString().toInt()
                 val baulaLambai = etBaulaLambai.text!!.trim().toString().toInt()
                 val kafGhera = etKafGhera.text!!.trim().toString().toInt()
@@ -187,10 +185,41 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         kakhi,
                         kamarGhera
                     )
-                    insertOrUpdateMeasurement(mObj)
-                    lifecycleScope.launchWhenResumed {
-                        findNavController().navigateUp()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        withContext(Dispatchers.IO) {
+                            saveClothingToDb(
+                                mCustomerId!!,
+                                typeOfOrder,
+                                totalPrice,
+                                advance,
+                                dueDate,
+                                isPaid
+                            )
+                        }
+                        withContext(Dispatchers.IO) {
+                            insertOrUpdateMeasurement(mObj)
+                        }
+                        withContext(Dispatchers.IO) {
+                            val clothing = async { mViewModel.getLatestClothing() }
+                            clothing.await()?.let {
+                                Log.d(
+                                    TAG,
+                                    "onCreateView: customerID:$mCustomerId and clothing:${it.clothingId}"
+                                )
+                                val notification = async {
+                                    mViewModel.getNotificationId(mCustomerId!!, it.clothingId!!)
+                                }
+                                notification.await()?.let {
+                                    withContext(Dispatchers.Main) {
+                                        Log.d(TAG, "onCreateView: notification ->$it")
+                                        scheduleNotification(it)
+                                    }
+                                }
+                            }
+                        }
                     }
+
+
                 }
 
 
@@ -222,14 +251,60 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
 
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Notification Channel"
+            val desc = "A description"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance)
+            channel.description = desc
+            val notificationManager =
+                requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun scheduleNotification(notificationEntity: NotificationEntity) {
+        val intent = Intent(requireContext().applicationContext, Notification::class.java)
+        val title = "Notify title for ${notificationEntity.notificationId!!}"
+        val message = "Custom msg"
+        intent.putExtra(titleExtra, title)
+        intent.putExtra(messageExtra, message)
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            requireContext().applicationContext,
+            notificationEntity.notificationId,
+            intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        val alarmManager = requireActivity().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val time = getCustomTime()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                time,
+                pendingIntent
+            )
+        }
+
+        findNavController().navigateUp()
+    }
+
+    private fun getCustomTime(): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 5)
+
+        return calendar.timeInMillis
+    }
+
     private fun saveClothingToDb(
         customerId: Int,
         typeOfOrder: String,
         totalPrice: Int,
         advance: Int,
         dueDate: String,
-        isPaid: Boolean,
-        notificationDate: Long
+        isPaid: Boolean
     ) {
         try {
             mViewModel.insertClothing(
@@ -240,8 +315,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     totalPrice,
                     totalPrice - advance,
                     dueDate,
-                    isPaid,
-                    notificationDate
+                    isPaid
                 )
             )
 
@@ -262,8 +336,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         requireContext(),
                         "Clothes Added Successfully",
                         Toast.LENGTH_SHORT
-                    )
-                        .show()
+                    ).show()
                 }
             }
 

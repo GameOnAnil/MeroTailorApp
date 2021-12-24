@@ -121,8 +121,7 @@ class PayFragment : Fragment() {
                     it.price,
                     it.remaining - paid,
                     it.dueDate,
-                    isPaid,
-                    null
+                    isPaid
                 )
                 Log.d(TAG, "updateDatabase: clothing=${clothing}")
                 mViewModel.updateClothing(clothing)

@@ -100,12 +100,16 @@ class TailorRepository(context: Context) {
         return tailorDao.getCurrentCustomer(customerId)
     }
 
-    fun getNotificationId(customerId: Int, clothingId: Int): List<NotificationEntity> {
-        return tailorDao.getNotificationId(clothingId = clothingId)
+    fun getNotificationId(customerId: Int, clothingId: Int): NotificationEntity? {
+        return tailorDao.getNotificationId(customerId, clothingId)
     }
 
     fun getLatestClothing(): Clothing? {
         return tailorDao.getLatestClothing()
+    }
+
+    fun deleteNotification(customerId: Int, clothingId: Int) {
+        tailorDao.deleteNotification(customerId, clothingId)
     }
 
 

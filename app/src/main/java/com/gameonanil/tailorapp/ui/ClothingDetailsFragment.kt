@@ -21,10 +21,11 @@ import androidx.navigation.ui.NavigationUI
 import com.gameonanil.tailorapp.R
 import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Measurement
+import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import com.gameonanil.tailorapp.databinding.FragmentClothingDetailsBinding
 import com.gameonanil.tailorapp.utils.*
 import com.gameonanil.tailorapp.utils.Notification
-import com.gameonanil.tailorapp.viewmodel.TailorViewModel
+import com.gameonanil.tailorapp.viewmodel.ClothingDetailViewModel
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -37,7 +38,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     private var _binding: FragmentClothingDetailsBinding? = null
     private val binding: FragmentClothingDetailsBinding get() = _binding!!
 
-    private lateinit var mViewModel: TailorViewModel
+    private lateinit var mViewModel: ClothingDetailViewModel
     private var mClothingId: Int? = null
     private var mCustomerId: Int? = null
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -53,14 +54,14 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         NavigationUI.setupWithNavController(binding.toolbar, navHostFragment, appBarConfiguration)
 
 
-        mViewModel = ViewModelProvider(this).get(TailorViewModel::class.java)
+        mViewModel = ViewModelProvider(this).get(ClothingDetailViewModel::class.java)
 
         mClothingId = ClothingDetailsFragmentArgs.fromBundle(requireArguments()).clothingId
         mCustomerId = ClothingDetailsFragmentArgs.fromBundle(requireArguments()).customerId
         initDetails()
         createNotificationChannel()
 
-        getNotificationId(mCustomerId!!, mCustomerId!!)
+
 
         binding.apply {
             btnUpdate.setOnClickListener {
@@ -221,8 +222,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     totalPrice,
                     remaining,
                     dueDate,
-                    isPaid,
-                    notificationId
+                    isPaid
                 )
             Log.d(TAG, "updateDetails: CLOTHING:$clothing")
             val measureObject = Measurement(
@@ -238,9 +238,13 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             CoroutineScope(Dispatchers.IO).launch {
                 insertOrUpdateMeasure(measureObject, clothing)
             }.invokeOnCompletion {
-                CoroutineScope(Dispatchers.Main).launch {
-                    scheduleNotification()
-                    findNavController().navigateUp()
+                var notificationEntity: NotificationEntity? = null
+                CoroutineScope(Dispatchers.IO).launch {
+                    notificationEntity = getNotificationId()
+                }.invokeOnCompletion {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        scheduleNotification(notificationEntity!!)
+                    }
                 }
             }
         }
@@ -327,13 +331,11 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
         binding.etDueDate.setText(formattedDate.toString())
     }
 
-    private fun getNotificationId(customerId: Int, clothingId: Int) {
-        CoroutineScope(Dispatchers.IO).launch {
-            Log.d(TAG, "onCreateView: mCustomer=${mCustomerId!!}")
-            Log.d(TAG, "onCreateView: mClothing=${mClothingId!!}")
-            val notification = mViewModel.getNotificationId(mCustomerId!!, mClothingId!!)
-            Log.d(TAG, "getNotificationId: NotificationID=${notification}")
-        }
+    private fun getNotificationId(): NotificationEntity {
+        Log.d(TAG, "getNotificationId: customer=${mCustomerId!!} and clothing=${mClothingId!!}")
+        val notification = mViewModel.getNotificationId(mCustomerId!!, mClothingId!!)
+        Log.d(TAG, "getNotificationId: NotificationID=${notification}")
+        return notification!!
 
     }
 
@@ -345,16 +347,16 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
     }
 
 
-    private fun scheduleNotification() {
+    private fun scheduleNotification(notificationEntity: NotificationEntity) {
         val intent = Intent(requireContext().applicationContext, Notification::class.java)
-        val title = "Notify title"
+        val title = "Notify title for ${notificationEntity.notificationId!!}"
         val message = "Custom msg"
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext().applicationContext,
-            notificationId,
+            notificationEntity.notificationId,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -368,6 +370,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 pendingIntent
             )
         }
+
         findNavController().navigateUp()
     }
 

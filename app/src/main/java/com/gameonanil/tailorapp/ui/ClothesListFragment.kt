@@ -26,13 +26,12 @@ import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Customer
 import com.gameonanil.tailorapp.databinding.FragmentClothesListBinding
 import com.gameonanil.tailorapp.utils.Notification
-
 import com.gameonanil.tailorapp.utils.SwipeGesture
-import com.gameonanil.tailorapp.utils.notificationId
 import com.gameonanil.tailorapp.viewmodel.ClothingListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -134,21 +133,29 @@ class ClothesListFragment : Fragment(), ClothesListAdapter.ClothesListListener {
     }
 
     override fun handleDeleteItem(clothing: Clothing, position: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            deleteNotification(notificationId)
-            mAdapter.notifyDataSetChanged()
-        }
-        /*    CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            val notification =
+                clothingListViewModel.getNotificationId(customerId!!, clothing.clothingId!!)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                notification?.let { deleteNotification(it.notificationId!!) }
+                withContext(Dispatchers.Main) {
+                    mAdapter.notifyDataSetChanged()
+                }
+            }
+        }.invokeOnCompletion {
+            CoroutineScope(Dispatchers.IO).launch {
+                clothingListViewModel.deleteNotification(customerId!!, clothing.clothingId!!)
                 clothingListViewModel.deleteClothing(clothing)
                 withContext(Dispatchers.Main) {
                     mAdapter.notifyOurItemDeleted(position)
                 }
-            }*/
+            }
+        }
+
+
     }
 
     private fun getDataByPrice() {
-
-
         var customer: Customer? = null
         var clothingList: List<Clothing>? = null
         CoroutineScope(Dispatchers.IO).launch {
