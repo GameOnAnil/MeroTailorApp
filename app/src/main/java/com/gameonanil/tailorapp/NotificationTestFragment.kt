@@ -13,8 +13,10 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.gameonanil.tailorapp.databinding.FragmentNotificationTestBinding
-import com.gameonanil.tailorapp.utils.*
 import com.gameonanil.tailorapp.utils.Notification
+import com.gameonanil.tailorapp.utils.channelId
+import com.gameonanil.tailorapp.utils.messageExtra
+import com.gameonanil.tailorapp.utils.titleExtra
 import java.util.*
 
 
@@ -59,7 +61,7 @@ class NotificationTestFragment : Fragment() {
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext().applicationContext,
-            notificationId,
+            0,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -116,7 +118,7 @@ class NotificationTestFragment : Fragment() {
         val intent = Intent(requireContext().applicationContext, Notification::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext().applicationContext,
-            notificationId,
+            0,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )

@@ -18,9 +18,7 @@ class AddClothingViewModel(application: Application) : AndroidViewModel(applicat
 
     /**INSERT**/
     fun insertClothing(clothing: Clothing) {
-        viewModelScope.launch(Dispatchers.IO) {
             repository.insertClothing(clothing)
-        }
     }
 
     fun insertMeasurement(measurement: Measurement) {
@@ -30,9 +28,8 @@ class AddClothingViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun insertNotification(notificationEntity: NotificationEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.insertNotification(notificationEntity)
-        }
+        repository.insertNotification(notificationEntity)
+
     }
 
     /**UPDATE**/

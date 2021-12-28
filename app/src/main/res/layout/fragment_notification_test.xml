@@ -20,8 +20,7 @@
             android:layout_weight="1"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
-            android:scaleX="0.7"
-            android:scaleY="0.7" />
+             />
 
         <TimePicker
             android:id="@+id/timePicker"

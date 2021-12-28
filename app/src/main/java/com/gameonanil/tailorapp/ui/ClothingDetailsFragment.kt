@@ -243,7 +243,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     notificationEntity = getNotificationId()
                 }.invokeOnCompletion {
                     CoroutineScope(Dispatchers.Main).launch {
-                        scheduleNotification(notificationEntity!!)
+                        scheduleNotification(notificationEntity!!, clothing)
                     }
                 }
             }
@@ -341,22 +341,29 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private fun getCustomTime(): Long {
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 5)
+        val dateFromDatePicker =
+            SimpleDateFormat("dd MMM yyyy", Locale.US).parse(binding.etDueDate.text.toString())
+        calendar.time = dateFromDatePicker!!
+        calendar.set(Calendar.HOUR_OF_DAY, 8)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        Log.d(TAG, "getCustomTime: CALENDAR=${calendar.time}")
 
         return calendar.timeInMillis
     }
 
 
-    private fun scheduleNotification(notificationEntity: NotificationEntity) {
+    private fun scheduleNotification(notificationEntity: NotificationEntity, clothing: Clothing) {
         val intent = Intent(requireContext().applicationContext, Notification::class.java)
-        val title = "Notify title for ${notificationEntity.notificationId!!}"
-        val message = "Custom msg"
+        val title = "Urgent Order!! ${clothing.clothingName}"
+        val message = "You have urgent order due today."
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
+        intent.putExtra(notificationIdExtra, notificationEntity.notificationId)
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext().applicationContext,
-            notificationEntity.notificationId,
+            notificationEntity.notificationId!!,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -381,6 +388,7 @@ class ClothingDetailsFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance)
             channel.description = desc
+            channel.setSound(null, null)
             val notificationManager =
                 requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)

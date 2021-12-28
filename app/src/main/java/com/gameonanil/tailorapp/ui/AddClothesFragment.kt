@@ -26,10 +26,8 @@ import com.gameonanil.tailorapp.data.entity.Clothing
 import com.gameonanil.tailorapp.data.entity.Measurement
 import com.gameonanil.tailorapp.data.entity.NotificationEntity
 import com.gameonanil.tailorapp.databinding.FragmentAddClothesBinding
+import com.gameonanil.tailorapp.utils.*
 import com.gameonanil.tailorapp.utils.Notification
-import com.gameonanil.tailorapp.utils.channelId
-import com.gameonanil.tailorapp.utils.messageExtra
-import com.gameonanil.tailorapp.utils.titleExtra
 import com.gameonanil.tailorapp.viewmodel.AddClothingViewModel
 import kotlinx.coroutines.*
 import java.text.SimpleDateFormat
@@ -172,6 +170,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                 val kamarLambai = etKamarLambai.text!!.trim().toString().toInt()
                 val kum = etKum.text!!.trim().toString().toInt()
                 val puraLambai = etPuraLambai.text!!.trim().toString().toInt()
+
                 mCustomerId?.let { cusId ->
                     val mObj = Measurement(
                         null,
@@ -186,7 +185,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                         kamarGhera
                     )
                     CoroutineScope(Dispatchers.IO).launch {
-                        withContext(Dispatchers.IO) {
+                        val saving = async {
                             saveClothingToDb(
                                 mCustomerId!!,
                                 typeOfOrder,
@@ -196,24 +195,36 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                                 isPaid
                             )
                         }
-                        withContext(Dispatchers.IO) {
-                            insertOrUpdateMeasurement(mObj)
-                        }
-                        withContext(Dispatchers.IO) {
-                            val clothing = async { mViewModel.getLatestClothing() }
-                            clothing.await()?.let {
-                                Log.d(
-                                    TAG,
-                                    "onCreateView: customerID:$mCustomerId and clothing:${it.clothingId}"
+                        saving.await().let {
+                            mViewModel.getLatestClothing()?.let {
+                                mViewModel.insertNotification(
+                                    NotificationEntity(
+                                        null,
+                                        mCustomerId!!,
+                                        it.clothingId!!
+                                    )
                                 )
-                                val notification = async {
-                                    mViewModel.getNotificationId(mCustomerId!!, it.clothingId!!)
-                                }
-                                notification.await()?.let {
-                                    withContext(Dispatchers.Main) {
-                                        Log.d(TAG, "onCreateView: notification ->$it")
-                                        scheduleNotification(it)
-                                    }
+                            }
+                        }
+                        insertOrUpdateMeasurement(mObj)
+                        val clothing = async { mViewModel.getLatestClothing() }
+                        clothing.await()?.let { currentClothing ->
+                            Log.d(
+                                TAG,
+                                "onCreateView: customerID:$mCustomerId and clothing:${currentClothing.clothingId}"
+                            )
+                            val notification = async {
+                                mViewModel.getNotificationId(
+                                    mCustomerId!!,
+                                    currentClothing.clothingId!!
+                                )
+                            }
+                            if (notification.await() == null) {
+                                Log.d(TAG, "onCreateView: Notification.await is null")
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    Log.d(TAG, "onCreateView: notification ->$currentClothing")
+                                    scheduleNotification(notification.await()!!, currentClothing)
                                 }
                             }
                         }
@@ -221,7 +232,13 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
 
                 }
-
+                CoroutineScope(Dispatchers.Main).launch {
+                    Toast.makeText(
+                        requireActivity().applicationContext,
+                        "Clothes Added Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
             }
 
@@ -258,22 +275,24 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(channelId, name, importance)
             channel.description = desc
+            channel.setSound(null, null)
             val notificationManager =
                 requireActivity().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
     }
 
-    private fun scheduleNotification(notificationEntity: NotificationEntity) {
+    private fun scheduleNotification(notificationEntity: NotificationEntity, clothing: Clothing) {
         val intent = Intent(requireContext().applicationContext, Notification::class.java)
-        val title = "Notify title for ${notificationEntity.notificationId!!}"
-        val message = "Custom msg"
+        val title = "Urgent Order!! ${clothing.clothingName}"
+        val message = "You have urgent order due today."
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
+        intent.putExtra(notificationIdExtra, notificationEntity.notificationId)
 
         val pendingIntent = PendingIntent.getBroadcast(
             requireContext().applicationContext,
-            notificationEntity.notificationId,
+            notificationEntity.notificationId!!,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -293,7 +312,13 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private fun getCustomTime(): Long {
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.SECOND, calendar.get(Calendar.SECOND) + 5)
+        val dateFromDatePicker =
+            SimpleDateFormat("dd MMM yyyy", Locale.US).parse(binding.etDueDate.text.toString())
+        calendar.time = dateFromDatePicker!!
+        calendar.set(Calendar.HOUR_OF_DAY, 8)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        Log.d(TAG, "getCustomTime: CALENDAR=${calendar.time}")
 
         return calendar.timeInMillis
     }
@@ -318,29 +343,6 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
                     isPaid
                 )
             )
-
-            CoroutineScope(Dispatchers.IO).launch {
-                mViewModel.getLatestClothing()?.let {
-                    mViewModel.insertNotification(
-                        NotificationEntity(
-                            null,
-                            customerId,
-                            it.clothingId!!
-                        )
-                    )
-                }
-
-            }.invokeOnCompletion {
-                CoroutineScope(Dispatchers.Main).launch {
-                    Toast.makeText(
-                        requireContext(),
-                        "Clothes Added Successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-
-
         } catch (e: SQLiteException) {
             Log.d(TAG, "saveClothingToDb: ERROR:${e.message}")
         }
