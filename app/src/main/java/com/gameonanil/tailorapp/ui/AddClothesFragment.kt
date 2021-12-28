@@ -284,7 +284,7 @@ class AddClothesFragment : Fragment(), DatePickerDialog.OnDateSetListener {
 
     private fun scheduleNotification(notificationEntity: NotificationEntity, clothing: Clothing) {
         val intent = Intent(requireContext().applicationContext, Notification::class.java)
-        val title = "Urgent Order!! ${clothing.clothingName}"
+        val title = "Urgent Order for ${clothing.clothingName} !!"
         val message = "You have urgent order due today."
         intent.putExtra(titleExtra, title)
         intent.putExtra(messageExtra, message)
