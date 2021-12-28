@@ -4,6 +4,9 @@ This is an app made for a Tailor/ Clothing shop where the owner can add all the 
 <p> All the data are stored in local Sqlite Db so the user doesn't have to login to any account.
 <img src = "MeroTailorBanner.jpg" />
 
+***Download latest apk from below 👇***
+
+[![Instagram Clone App](https://img.shields.io/badge/%20%20Downlaod%20Latest%20-Apk-red)](https://drive.google.com/drive/folders/1owhFCYdztQMZRlJ00PrsnjyYz8MZzgIQ?usp=sharing)
 
 
 ## Built With 🛠
